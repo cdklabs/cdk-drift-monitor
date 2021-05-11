@@ -1,8 +1,5 @@
-// eslint disabled as aws-sdk dependency exists for every lambda at runtime
-/* eslint-disable import/no-extraneous-dependencies */
 import { CloudFormation, CloudWatch } from 'aws-sdk';
 import { Stacks, NextToken, Stack, StackDriftDetectionStatus, StackDriftStatus } from 'aws-sdk/clients/cloudformation';
-/* eslint-enable import/no-extraneous-dependencies */
 
 const cloudformation = new CloudFormation();
 const cloudwatch = new CloudWatch();
