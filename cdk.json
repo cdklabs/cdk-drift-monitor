@@ -1,0 +1,3 @@
+{
+  "app": "node dist/app.js"
+}
