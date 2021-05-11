@@ -1,18 +1,26 @@
 ## CDK Drift Monitor
 
-Monitors for CloudFormation stack drifts. The construct requires a list of stack names to get started:
+Monitors for CloudFormation stack drifts. The construct requires a list of stacks to get started:
 
 ```typescript
-new DriftMonitor(driftDetectStack, 'CloudFormationDriftMonitor', {
-  stackNames: ['MyStack1', 'MyStack2']
+new DriftMonitor(driftDetectStack, 'DriftMonitor', {
+  stacks: MonitoredStack.fromStacks(myStack1, myStack2),
+});
+```
+
+It can also be initialized by providing stack names:
+
+```typescript
+new DriftMonitor(driftDetectStack, 'DriftMonitor', {
+  stacks: MonitoredStack.fromNames('MyStack1', 'MyStack2'),
 });
 ```
 
 By default, the drift detection will run every hour. This can be customized:
 
 ```typescript
-new DriftMonitor(driftDetectStack, 'CloudFormationDriftMonitor', {
-  stackNames: ['MyStack1', 'MyStack2'],
+new DriftMonitor(driftDetectStack, 'DriftMonitor', {
+  stacks: MonitoredStack.fromStacks(myStack1, myStack2),
   runEvery: Duration.minutes(10),
 });
 ```
@@ -20,8 +28,8 @@ new DriftMonitor(driftDetectStack, 'CloudFormationDriftMonitor', {
 The construct creates an alarm with no actions. Here's an example for adding an alarm action:
 
 ```typescript
-const driftMonitor = new DriftMonitor(driftDetectStack, 'CloudFormationDriftMonitor', {
-  stackNames: ['MyStack1', 'MyStack2'],
+const driftMonitor = new DriftMonitor(driftDetectStack, 'DriftMonitor', {
+  stacks: MonitoredStack.fromStacks(myStack1, myStack2),
   runEvery: Duration.minutes(10),
 });
 driftMonitor.alarm.addAlarmAction(new SnsAction('errorTopic'))

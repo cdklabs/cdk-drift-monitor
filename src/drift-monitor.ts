@@ -5,15 +5,15 @@ import * as events from '@aws-cdk/aws-events';
 import * as eventsTargets from '@aws-cdk/aws-events-targets';
 import { Effect, Policy, PolicyStatement } from '@aws-cdk/aws-iam';
 import * as lambda from '@aws-cdk/aws-lambda';
-import { Construct, Duration } from '@aws-cdk/core';
+import { Construct, Duration, Stack } from '@aws-cdk/core';
 
 
 export interface DriftMonitorProps {
 
   /**
-   * List of stack names to monitor for CloudFormation drifts
+   * List of stack to monitor for CloudFormation drifts
    */
-  readonly stackNames: string[];
+  readonly stacks: MonitoredStack[];
 
   /**
    * Run drift detection every X duration.
@@ -38,6 +38,20 @@ export interface DriftMonitorProps {
 
 }
 
+export class MonitoredStack {
+
+  public static fromNames(...stackNames : string[]): MonitoredStack[] {
+    return stackNames.map(stackName => new MonitoredStack(stackName));
+  }
+
+  public static fromStacks(...stacks: Stack[]): MonitoredStack[] {
+    return stacks.map(stack => new MonitoredStack(stack.stackName));
+  }
+
+  private constructor(public readonly name: string) { }
+
+}
+
 export class DriftMonitor extends Construct {
 
   public readonly alarm: Alarm;
@@ -45,7 +59,7 @@ export class DriftMonitor extends Construct {
   constructor(scope: Construct, id: string, props: DriftMonitorProps) {
     super(scope, id);
 
-    if (props.stackNames.length == 0) {
+    if (props.stacks.length == 0) {
       throw new Error('Must provide at least one stack name');
     }
     if (props.runEvery !== undefined && props.runEvery!.toMinutes() < 1) {
@@ -58,7 +72,7 @@ export class DriftMonitor extends Construct {
       handler: 'detect-drift.handler',
       code: lambda.Code.fromAsset(join(__dirname, '/handler')),
       environment: {
-        stackNames: props.stackNames.join(','),
+        stackNames: props.stacks.map(stack => stack.name).join(','),
         metricNamespace: metricNamespace,
       },
       timeout: Duration.minutes(1),

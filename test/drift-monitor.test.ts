@@ -1,14 +1,16 @@
 import { SynthUtils } from '@aws-cdk/assert';
 import { Duration, Stack } from '@aws-cdk/core';
 import '@aws-cdk/assert/jest';
-import { DriftMonitor } from '../src';
+import { DriftMonitor, MonitoredStack } from '../src';
 
 test('snapshot test', () => {
   // GIVEN
   const stack = new Stack();
 
   // WHEN
-  new DriftMonitor(stack, 'DriftMonitor', { stackNames: ['stack1', 'stack2'] });
+  new DriftMonitor(stack, 'DriftMonitor', {
+    stacks: MonitoredStack.fromNames('stack1', 'stack2'),
+  });
   const cfnArtifact = SynthUtils.synthesize(stack);
 
   // THEN
@@ -20,7 +22,9 @@ test('lambda is created with expected environment variables', () => {
   const stack = new Stack();
 
   // WHEN
-  new DriftMonitor(stack, 'DriftMonitor', { stackNames: ['stack1', 'stack2'] });
+  new DriftMonitor(stack, 'DriftMonitor', {
+    stacks: MonitoredStack.fromNames('stack1', 'stack2'),
+  });
 
   // THEN
   expect(stack).toHaveResource('AWS::Lambda::Function', {
@@ -38,7 +42,10 @@ test('when given metric namespace then lambda is created with expected environme
   const stack = new Stack();
 
   // WHEN
-  new DriftMonitor(stack, 'DriftMonitor', { stackNames: ['stack1', 'stack2'], metricNamespace: 'customMetricNamespace' });
+  new DriftMonitor(stack, 'DriftMonitor', {
+    stacks: MonitoredStack.fromNames('stack1', 'stack2'),
+    metricNamespace: 'customMetricNamespace',
+  });
 
   // THEN
   expect(stack).toHaveResource('AWS::Lambda::Function', {
@@ -56,7 +63,9 @@ test('when no runEvery argument then lambda is scheduled to run every hour by de
   const stack = new Stack();
 
   // WHEN
-  new DriftMonitor(stack, 'DriftMonitor', { stackNames: ['stack1', 'stack2'] });
+  new DriftMonitor(stack, 'DriftMonitor', {
+    stacks: MonitoredStack.fromNames('stack1', 'stack2'),
+  });
 
   // THEN
   expect(stack).toHaveResource('AWS::Events::Rule', {
@@ -70,7 +79,9 @@ test('when stackNames is empty then construct throws', () => {
 
   // WHEN / THEN
   expect(() => {
-    new DriftMonitor(stack, 'DriftMonitor', { stackNames: [] });
+    new DriftMonitor(stack, 'DriftMonitor', {
+      stacks: [],
+    });
   }).toThrow();
 });
 
@@ -81,7 +92,7 @@ test('when runEvery < 1 minute then construct throws', () => {
   // WHEN / THEN
   expect(() => {
     new DriftMonitor(stack, 'DriftMonitor', {
-      stackNames: ['stack1', 'stack2'],
+      stacks: MonitoredStack.fromNames('stack1', 'stack2'),
       runEvery: Duration.seconds(59),
     });
   }).toThrow();
