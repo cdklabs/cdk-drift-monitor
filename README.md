@@ -4,7 +4,7 @@ Monitors for CloudFormation stack drifts. The construct requires a list of stack
 
 ```typescript
 new DriftMonitor(driftDetectStack, 'CloudFormationDriftMonitor', {
-    stackNames: ['MyStack1', 'MyStack2']
+  stackNames: ['MyStack1', 'MyStack2']
 });
 ```
 
@@ -12,8 +12,8 @@ By default, the drift detection will run every hour. This can be customized:
 
 ```typescript
 new DriftMonitor(driftDetectStack, 'CloudFormationDriftMonitor', {
-    stackNames: ['MyStack1', 'MyStack2'],
-    runEvery: Duration.minutes(10),
+  stackNames: ['MyStack1', 'MyStack2'],
+  runEvery: Duration.minutes(10),
 });
 ```
 
@@ -21,8 +21,8 @@ The construct creates an alarm with no actions. Here's an example for adding an 
 
 ```typescript
 const driftMonitor = new DriftMonitor(driftDetectStack, 'CloudFormationDriftMonitor', {
-    stackNames: ['MyStack1', 'MyStack2'],
-    runEvery: Duration.minutes(10),
+  stackNames: ['MyStack1', 'MyStack2'],
+  runEvery: Duration.minutes(10),
 });
 driftMonitor.alarm.addAlarmAction(new SnsAction('errorTopic'))
 ```
