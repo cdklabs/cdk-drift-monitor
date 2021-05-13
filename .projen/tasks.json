@@ -67,6 +67,9 @@
         },
         {
           "spawn": "docgen"
+        },
+        {
+          "spawn": "bundle:handler/detect-drift"
         }
       ]
     },
@@ -206,6 +209,15 @@
       "steps": [
         {
           "exec": "jsii-docgen"
+        }
+      ]
+    },
+    "bundle:handler/detect-drift": {
+      "name": "bundle:handler/detect-drift",
+      "description": "bundle handler/detect-drift lambda handler",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/handler/detect-drift.ts --target=\"node14\" --platform=\"node\" --outfile=\"src/handler/detect-drift.js\" --external:aws-sdk"
         }
       ]
     }
