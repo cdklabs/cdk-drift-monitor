@@ -12,8 +12,15 @@ export interface DriftMonitorProps {
 
   /**
    * List of stack to monitor for CloudFormation drifts
+   * Either stacks or stackNames are required (though not both)
    */
-  readonly stacks: MonitoredStack[];
+  readonly stacks?: Stack[];
+
+  /**
+   * List of stack names to monitor for CloudFormation drifts.
+   * Either stacks or stackNames are required (though not both)
+   */
+  readonly stackNames?: string[];
 
   /**
    * Run drift detection every X duration.
@@ -38,20 +45,6 @@ export interface DriftMonitorProps {
 
 }
 
-export class MonitoredStack {
-
-  public static fromNames(...stackNames : string[]): MonitoredStack[] {
-    return stackNames.map(stackName => new MonitoredStack(stackName));
-  }
-
-  public static fromStacks(...stacks: Stack[]): MonitoredStack[] {
-    return stacks.map(stack => new MonitoredStack(stack.stackName));
-  }
-
-  private constructor(public readonly name: string) { }
-
-}
-
 export class DriftMonitor extends Construct {
 
   public readonly alarm: Alarm;
@@ -59,20 +52,25 @@ export class DriftMonitor extends Construct {
   constructor(scope: Construct, id: string, props: DriftMonitorProps) {
     super(scope, id);
 
-    if (props.stacks.length == 0) {
-      throw new Error('Must provide at least one stack name');
+    if ((props.stacks !== undefined && props.stacks!.length > 0) && (props.stackNames !== undefined && props.stackNames!.length > 0)) {
+      throw new Error('Must have either stacks or stackNames, not both');
+    }
+    if ((props.stacks === undefined || (props.stacks!.length === 0)) &&
+        (props.stackNames === undefined || (props.stackNames!.length === 0))) {
+      throw new Error('Must provide at least one stack');
     }
     if (props.runEvery !== undefined && props.runEvery!.toMinutes() < 1) {
       throw new Error('runEvery must be higher than 1 minute');
     }
 
+    const stacks = props.stacks ? props.stacks!.map(stack => stack.stackName) : props.stackNames!;
     const metricNamespace = props.metricNamespace ?? 'DriftMonitor';
     const detectDriftLambda = new lambda.Function(this, 'DetectDriftLambda', {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: 'detect-drift.handler',
       code: lambda.Code.fromAsset(join(__dirname, '/handler')),
       environment: {
-        stackNames: props.stacks.map(stack => stack.name).join(','),
+        stackNames: stacks.join(','),
         metricNamespace: metricNamespace,
       },
       timeout: Duration.minutes(1),

@@ -5,7 +5,6 @@
 Name|Description
 ----|-----------
 [DriftMonitor](#cdk-drift-monitor-driftmonitor)|*No description*
-[MonitoredStack](#cdk-drift-monitor-monitoredstack)|*No description*
 
 
 **Structs**
@@ -35,10 +34,11 @@ new DriftMonitor(scope: Construct, id: string, props: DriftMonitorProps)
 * **scope** (<code>[Construct](#aws-cdk-core-construct)</code>)  *No description*
 * **id** (<code>string</code>)  *No description*
 * **props** (<code>[DriftMonitorProps](#cdk-drift-monitor-driftmonitorprops)</code>)  *No description*
-  * **stacks** (<code>Array<[MonitoredStack](#cdk-drift-monitor-monitoredstack)></code>)  List of stack to monitor for CloudFormation drifts. 
   * **alarmOptions** (<code>[CreateAlarmOptions](#aws-cdk-aws-cloudwatch-createalarmoptions)</code>)  Options to create alarm. __*Default*__: alarm on 1 drifted stacks or more, for 3 data points, for
   * **metricNamespace** (<code>string</code>)  Namespace of published metric. __*Default*__: 'DriftMonitor'
   * **runEvery** (<code>[Duration](#aws-cdk-core-duration)</code>)  Run drift detection every X duration. __*Default*__: Duration.hours(1)
+  * **stackNames** (<code>Array<string></code>)  List of stack names to monitor for CloudFormation drifts. __*Optional*__
+  * **stacks** (<code>Array<[Stack](#aws-cdk-core-stack)></code>)  List of stack to monitor for CloudFormation drifts Either stacks or stackNames are required (though not both). __*Optional*__
 
 
 
@@ -51,50 +51,6 @@ Name | Type | Description
 
 
 
-## class MonitoredStack  <a id="cdk-drift-monitor-monitoredstack"></a>
-
-
-
-
-
-### Properties
-
-
-Name | Type | Description 
------|------|-------------
-**name** | <code>string</code> | <span></span>
-
-### Methods
-
-
-#### *static* fromNames(...stackNames) <a id="cdk-drift-monitor-monitoredstack-fromnames"></a>
-
-
-
-```ts
-static fromNames(...stackNames: string[]): Array<MonitoredStack>
-```
-
-* **stackNames** (<code>string</code>)  *No description*
-
-__Returns__:
-* <code>Array<[MonitoredStack](#cdk-drift-monitor-monitoredstack)></code>
-
-#### *static* fromStacks(...stacks) <a id="cdk-drift-monitor-monitoredstack-fromstacks"></a>
-
-
-
-```ts
-static fromStacks(...stacks: Stack[]): Array<MonitoredStack>
-```
-
-* **stacks** (<code>[Stack](#aws-cdk-core-stack)</code>)  *No description*
-
-__Returns__:
-* <code>Array<[MonitoredStack](#cdk-drift-monitor-monitoredstack)></code>
-
-
-
 ## struct DriftMonitorProps  <a id="cdk-drift-monitor-driftmonitorprops"></a>
 
 
@@ -104,10 +60,11 @@ __Returns__:
 
 Name | Type | Description 
 -----|------|-------------
-**stacks** | <code>Array<[MonitoredStack](#cdk-drift-monitor-monitoredstack)></code> | List of stack to monitor for CloudFormation drifts.
 **alarmOptions**? | <code>[CreateAlarmOptions](#aws-cdk-aws-cloudwatch-createalarmoptions)</code> | Options to create alarm.<br/>__*Default*__: alarm on 1 drifted stacks or more, for 3 data points, for
 **metricNamespace**? | <code>string</code> | Namespace of published metric.<br/>__*Default*__: 'DriftMonitor'
 **runEvery**? | <code>[Duration](#aws-cdk-core-duration)</code> | Run drift detection every X duration.<br/>__*Default*__: Duration.hours(1)
+**stackNames**? | <code>Array<string></code> | List of stack names to monitor for CloudFormation drifts.<br/>__*Optional*__
+**stacks**? | <code>Array<[Stack](#aws-cdk-core-stack)></code> | List of stack to monitor for CloudFormation drifts Either stacks or stackNames are required (though not both).<br/>__*Optional*__
 
 
 
