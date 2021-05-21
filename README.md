@@ -37,10 +37,7 @@ driftMonitor.alarm.addAlarmAction(new SnsAction('errorTopic'))
 
 ## Roadmap
 
-- [ ] More construct tests
-- [ ] Lambda handler tests
 - [ ] Publish (npm, maven, etc...)
-- [ ] Support `Stack[]` as construct argument
 - [ ] Add alarm for error on lambda execution?
 - [ ] Replace long list of IAM policy statement actions with something better
 
