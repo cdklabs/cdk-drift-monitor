@@ -20,6 +20,7 @@ const project = new AwsCdkConstructLibrary({
   devDeps: [
     'aws-sdk',
     'esbuild',
+    'jest-each',
   ],
   gitignore: [
     'src/**/*.js',

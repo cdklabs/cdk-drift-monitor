@@ -51,6 +51,10 @@
       "type": "build"
     },
     {
+      "name": "jest-each",
+      "type": "build"
+    },
+    {
       "name": "jest-junit",
       "version": "^12",
       "type": "build"
