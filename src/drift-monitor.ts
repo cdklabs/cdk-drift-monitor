@@ -59,7 +59,7 @@ export class DriftMonitor extends Construct {
         (props.stackNames === undefined || (props.stackNames!.length === 0))) {
       throw new Error('Must provide at least one stack');
     }
-    if (props.runEvery !== undefined && props.runEvery!.toMinutes() < 1) {
+    if (props.runEvery !== undefined && props.runEvery!.toSeconds() < 60) {
       throw new Error('runEvery must be higher than 1 minute');
     }
 
@@ -505,11 +505,11 @@ export class DriftMonitor extends Construct {
       return Duration.minutes(5);
     } else if (duration.toMinutes() <= 15) {
       return Duration.minutes(15);
-    } else if (duration.toHours() <= 1) {
+    } else if (duration.toMinutes() <= 60) {
       return Duration.hours(1);
     } else if (duration.toHours() <= 6) {
       return Duration.hours(6);
-    } else if (duration.toDays() <= 1) {
+    } else if (duration.toHours() <= 24) {
       return Duration.days(1);
     } else if (duration.toDays() <= 7) {
       return Duration.days(7);
