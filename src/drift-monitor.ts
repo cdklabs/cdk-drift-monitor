@@ -52,18 +52,18 @@ export class DriftMonitor extends Construct {
   constructor(scope: Construct, id: string, props: DriftMonitorProps) {
     super(scope, id);
 
-    if ((props.stacks !== undefined && props.stacks!.length > 0) && (props.stackNames !== undefined && props.stackNames!.length > 0)) {
+    if ((props.stacks !== undefined && props.stacks.length > 0) && (props.stackNames !== undefined && props.stackNames.length > 0)) {
       throw new Error('Must have either stacks or stackNames, not both');
     }
-    if ((props.stacks === undefined || (props.stacks!.length === 0)) &&
-        (props.stackNames === undefined || (props.stackNames!.length === 0))) {
+    if ((props.stacks === undefined || (props.stacks.length === 0)) &&
+        (props.stackNames === undefined || (props.stackNames.length === 0))) {
       throw new Error('Must provide at least one stack');
     }
-    if (props.runEvery !== undefined && props.runEvery!.toSeconds() < 60) {
+    if (props.runEvery !== undefined && props.runEvery.toSeconds() < 60) {
       throw new Error('runEvery must be higher than 1 minute');
     }
 
-    const stacks = props.stacks ? props.stacks!.map(stack => stack.stackName) : props.stackNames!;
+    const stacks = props.stacks ? props.stacks.map(stack => stack.stackName) : props.stackNames!;
     const metricNamespace = props.metricNamespace ?? 'DriftMonitor';
     const detectDriftLambda = new lambda.Function(this, 'DetectDriftLambda', {
       runtime: lambda.Runtime.NODEJS_14_X,
