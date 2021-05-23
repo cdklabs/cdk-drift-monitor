@@ -499,19 +499,20 @@ export class DriftMonitor extends Construct {
    * @return Duration - the closest CloudWatch period.
    */
   private getClosestCloudWatchMetricPeriod(duration: Duration) {
-    if (duration.toMinutes() <= 1) {
+    const timeConversionOptions = { integral: false };
+    if (duration.toMinutes(timeConversionOptions) <= 1) {
       return Duration.minutes(1);
-    } if (duration.toMinutes() <= 5) {
+    } if (duration.toMinutes(timeConversionOptions) <= 5) {
       return Duration.minutes(5);
-    } else if (duration.toMinutes() <= 15) {
+    } else if (duration.toMinutes(timeConversionOptions) <= 15) {
       return Duration.minutes(15);
-    } else if (duration.toMinutes() <= 60) {
+    } else if (duration.toHours(timeConversionOptions) <= 1) {
       return Duration.hours(1);
-    } else if (duration.toHours() <= 6) {
+    } else if (duration.toHours(timeConversionOptions) <= 6) {
       return Duration.hours(6);
-    } else if (duration.toHours() <= 24) {
+    } else if (duration.toDays(timeConversionOptions) <= 1) {
       return Duration.days(1);
-    } else if (duration.toDays() <= 7) {
+    } else if (duration.toDays(timeConversionOptions) <= 7) {
       return Duration.days(7);
     } else {
       return Duration.days(30);
