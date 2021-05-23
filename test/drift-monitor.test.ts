@@ -284,6 +284,22 @@ describe('runEvery CloudWatch metric period tests', () => {
     });
   });
 
+  test('when runEvery 61 minutes then period is 6 hour', () => {
+    // GIVEN
+    const stack = new Stack();
+
+    // WHEN
+    new DriftMonitor(stack, 'DriftMonitor', {
+      stackNames: ['stack1'],
+      runEvery: Duration.minutes(61),
+    });
+
+    // THEN
+    expect(stack).toHaveResourceLike('AWS::CloudWatch::Alarm', {
+      Period: Duration.hours(6).toSeconds(),
+    });
+  });
+
   test('when runEvery 5 hours then period is 6 hour', () => {
     // GIVEN
     const stack = new Stack();
