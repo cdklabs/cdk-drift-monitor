@@ -37,7 +37,9 @@ driftMonitor.alarm.addAlarmAction(new SnsAction('errorTopic'))
 
 ## Roadmap
 
-- [ ] Publish (npm, maven, etc...)
+- [ ] Publish to Maven
+- [ ] Publish to PyPi
+- [ ] Publish to NuGet
 - [ ] Add alarm for error on lambda execution?
 - [ ] Replace long list of IAM policy statement actions with something better
 
