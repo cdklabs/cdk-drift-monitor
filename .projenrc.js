@@ -25,6 +25,7 @@ const project = new AwsCdkConstructLibrary({
   gitignore: [
     'src/**/*.js',
   ],
+  releaseToNpm: true,
 });
 
 // A lambda handler must be ready in .js format before compilation runs in order to lambda asset to get bundled
