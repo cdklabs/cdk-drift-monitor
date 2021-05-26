@@ -2,7 +2,7 @@ const { AwsCdkConstructLibrary, ProjectType } = require('projen');
 const project = new AwsCdkConstructLibrary({
   author: 'Amazon Web Services, Inc.',
   authorAddress: 'aws-cdk-team@amazon.com',
-  cdkVersion: '1.102.0',
+  cdkVersion: '1.106.0',
   defaultReleaseBranch: 'main',
   name: 'cdk-drift-monitor',
   description: 'Monitors for CloudFormation stack drifts',
