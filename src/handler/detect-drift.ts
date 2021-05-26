@@ -14,18 +14,16 @@ export async function handler() {
 
   const requestedStackNames = process.env.stackNames.split(',');
   const metricNamespace = process.env.metricNamespace;
-  console.log(`stackNamesToDetectDrift: ${requestedStackNames}`);
-  const allStacks = await getStacks();
-  console.log(`Received stacks: ${allStacks.map(x => x.StackName)}`);
+  console.log(`requestedStackNames: ${requestedStackNames}`);
+  const stacks = await getStacks(requestedStackNames);
 
-  const notFoundStacks = requestedStackNames.filter(stackName => !allStacks.map(x => x.StackName).includes(stackName));
+  const notFoundStacks = requestedStackNames.filter(stackName => !stacks.map(x => x.StackName).includes(stackName));
   if (notFoundStacks.length >= 1) {
     throw new Error(`One or more stacks not found: ${notFoundStacks}`);
   }
 
-  const eligibleStacks = allStacks.filter(isEligibleStatus)
-    .filter(stack => requestedStackNames.includes(stack.StackName));
-  console.log(`Eligible stacks: ${eligibleStacks.map(x => x.StackName)}`);
+  const eligibleStacks = stacks.filter(isEligibleStatus)
+  console.log(`eligibleStacks: ${eligibleStacks.map(x => x.StackName)}`);
 
   let driftStatusList: (StackDriftStatus | undefined)[] = [];
   for (const stack of eligibleStacks) {
@@ -53,16 +51,20 @@ function isEligibleStatus(stack : Stack) {
   return validStates.includes(stack.StackStatus);
 }
 
-async function getStacks(): Promise<Stacks> {
-  let stacks: Stacks = [];
+async function getStacks(requestedStackNames: string[]): Promise<Stacks> {
+  let allStacks: Stacks = [];
   let nextToken: NextToken | undefined;
   do {
     const response = await cloudformation.describeStacks().promise();
-    stacks = response.Stacks ? [...stacks, ...response.Stacks!] : stacks;
+    allStacks = response.Stacks ? [...allStacks, ...response.Stacks!] : allStacks;
     nextToken = response.NextToken;
   } while (nextToken);
 
-  return stacks;
+  console.log(`Received stacks: ${allStacks.map(x => x.StackName)}`);
+  const requestedStacks = allStacks.filter(stack => requestedStackNames.includes(stack.StackName));
+  console.log(`Returning requested stacks: ${requestedStacks.map(x => x.StackName)}`);
+
+  return requestedStacks;
 }
 
 async function detectDriftAndGetDetectionId(stack: Stack): Promise<string> {
