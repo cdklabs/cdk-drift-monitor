@@ -22,7 +22,7 @@ export async function handler() {
     throw new Error(`One or more stacks not found: ${notFoundStacks}`);
   }
 
-  const eligibleStacks = stacks.filter(isEligibleStatus)
+  const eligibleStacks = stacks.filter(isEligibleStatus);
   console.log(`eligibleStacks: ${eligibleStacks.map(x => x.StackName)}`);
 
   let driftStatusList: (StackDriftStatus | undefined)[] = [];
