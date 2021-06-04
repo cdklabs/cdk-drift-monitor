@@ -24,18 +24,6 @@ describe('detect-drift lambda handler tests', () => {
     });
   });
 
-  test('when stackNames env variables missing then throw', async (done) => {
-    // GIVEN
-    process.env.metricNamespace = 'someNamespace';
-
-    // WHEN / THEN
-    const handler = await importHandler();
-    handler().catch(e => {
-      expect(e.toString()).toContain('Missing environment variables');
-      done();
-    });
-  });
-
   test('when metricNamespace env variables missing then throw', async (done) => {
     // GIVEN
     process.env.stackNames = 'stack';
@@ -217,6 +205,34 @@ describe('detect-drift lambda handler tests', () => {
       },
     ]);
     detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('IN_SYNC', 'DETECTION_COMPLETE');
+    detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('DRIFTED', 'DETECTION_COMPLETE');
+    detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('DRIFTED', 'DETECTION_COMPLETE');
+
+    // THEN
+    const handler = await importHandler();
+    void handler().then(() => {
+      expect(detectDriftMockManager.getDriftMetricValue()).toBe(2);
+      done();
+    });
+  });
+
+
+  test('when stackNames env variables missing then detect drift on all stacks', async (done) => {
+    // GIVEN
+    process.env.metricNamespace = 'someNamespace';
+
+    // WHEN
+    const detectDriftMockManager = new DetectDriftMockManager();
+    detectDriftMockManager.mockDescribeStacksResponse([
+      {
+        StackName: 'stack1',
+        StackStatus: 'CREATE_COMPLETE',
+      },
+      {
+        StackName: 'stack2',
+        StackStatus: 'CREATE_COMPLETE',
+      },
+    ]);
     detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('DRIFTED', 'DETECTION_COMPLETE');
     detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('DRIFTED', 'DETECTION_COMPLETE');
 

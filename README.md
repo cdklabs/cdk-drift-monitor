@@ -1,6 +1,12 @@
 ## CDK Drift Monitor
 
-Monitors for CloudFormation stack drifts. The construct requires a list of stacks to get started:
+Monitors for CloudFormation stack drifts. By default, detects drifts for all stacks:
+
+```typescript
+new DriftMonitor(driftDetectStack, 'DriftMonitor');
+```
+
+You can also specify a list of stacks to detect drifts:
 
 ```typescript
 new DriftMonitor(driftDetectStack, 'DriftMonitor', {
@@ -20,8 +26,7 @@ By default, the drift detection will run every hour. This can be customized:
 
 ```typescript
 new DriftMonitor(driftDetectStack, 'DriftMonitor', {
-  stacks: [myStack1, myStack2],
-  runEvery: Duration.minutes(10),
+  runEvery: Duration.minutes(10)
 });
 ```
 

@@ -28,7 +28,7 @@ __Extends__: [Construct](#aws-cdk-core-construct)
 
 
 ```ts
-new DriftMonitor(scope: Construct, id: string, props: DriftMonitorProps)
+new DriftMonitor(scope: Construct, id: string, props?: DriftMonitorProps)
 ```
 
 * **scope** (<code>[Construct](#aws-cdk-core-construct)</code>)  *No description*

@@ -8,17 +8,17 @@ const cloudformation = new CloudFormation();
 const cloudwatch = new CloudWatch();
 
 export async function handler() {
-  if (!process.env.stackNames || !process.env.metricNamespace) {
-    throw new Error(`Missing environment variables. stackNames: ${process.env.stackNames}, metricNamespace: ${process.env.metricNamespace}`);
+  if (!process.env.metricNamespace) {
+    throw new Error(`Missing environment variables. metricNamespace: ${process.env.metricNamespace}`);
   }
 
-  const requestedStackNames = process.env.stackNames.split(',');
+  const requestedStackNames = process.env.stackNames?.split(',');
   const metricNamespace = process.env.metricNamespace;
   console.log(`requestedStackNames: ${requestedStackNames}`);
   const stacks = await getStacks(requestedStackNames);
 
-  const notFoundStacks = requestedStackNames.filter(stackName => !stacks.map(x => x.StackName).includes(stackName));
-  if (notFoundStacks.length >= 1) {
+  const notFoundStacks = requestedStackNames?.filter(stackName => !stacks.map(x => x.StackName).includes(stackName));
+  if (notFoundStacks?.length ?? 0 >= 1) {
     throw new Error(`One or more stacks not found: ${notFoundStacks}`);
   }
 
@@ -51,7 +51,7 @@ function isEligibleStatus(stack : Stack) {
   return validStates.includes(stack.StackStatus);
 }
 
-async function getStacks(requestedStackNames: string[]): Promise<Stacks> {
+async function getStacks(requestedStackNames?: string[]): Promise<Stacks> {
   let allStacks: Stacks = [];
   let nextToken: NextToken | undefined;
   do {
@@ -61,7 +61,7 @@ async function getStacks(requestedStackNames: string[]): Promise<Stacks> {
   } while (nextToken);
 
   console.log(`Received stacks: ${allStacks.map(x => x.StackName)}`);
-  const requestedStacks = allStacks.filter(stack => requestedStackNames.includes(stack.StackName));
+  const requestedStacks = requestedStackNames ? allStacks.filter(stack => requestedStackNames.includes(stack.StackName)) : allStacks;
   console.log(`Returning requested stacks: ${requestedStacks.map(x => x.StackName)}`);
 
   return requestedStacks;
