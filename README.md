@@ -47,6 +47,7 @@ driftMonitor.alarm.addAlarmAction(new SnsAction('errorTopic'))
 - [ ] Publish to NuGet
 - [ ] Add alarm for error on lambda execution?
 - [ ] Replace long list of IAM policy statement actions with something better
+- [ ] Use [AWS Config rule `cloudformation-stack-drift-detection-check`](https://docs.aws.amazon.com/config/latest/developerguide/cloudformation-stack-drift-detection-check.html) instead of custom lambda 
 
 ## Security
 
