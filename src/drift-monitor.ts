@@ -49,41 +49,37 @@ export class DriftMonitor extends Construct {
 
   public readonly alarm: Alarm;
 
-  constructor(scope: Construct, id: string, props: DriftMonitorProps) {
+  constructor(scope: Construct, id: string, props?: DriftMonitorProps) {
     super(scope, id);
 
-    if ((props.stacks !== undefined && props.stacks.length > 0) && (props.stackNames !== undefined && props.stackNames.length > 0)) {
+    if ((props?.stacks !== undefined && props.stacks.length > 0) && (props.stackNames !== undefined && props.stackNames.length > 0)) {
       throw new Error('Must have either stacks or stackNames, not both');
     }
-    if ((props.stacks === undefined || (props.stacks.length === 0)) &&
-        (props.stackNames === undefined || (props.stackNames.length === 0))) {
-      throw new Error('Must provide at least one stack');
-    }
-    if (props.runEvery !== undefined && props.runEvery.toSeconds() < 60) {
+    if (props?.runEvery !== undefined && props.runEvery.toSeconds() < 60) {
       throw new Error('runEvery must be higher than 1 minute');
     }
 
-    const stacks = props.stacks ? props.stacks.map(stack => stack.stackName) : props.stackNames!;
-    const metricNamespace = props.metricNamespace ?? 'DriftMonitor';
+    const stacks = props?.stacks?.map(stack => stack.stackName) ?? props?.stackNames;
+    const metricNamespace = props?.metricNamespace ?? 'DriftMonitor';
     const detectDriftLambda = new lambda.Function(this, 'DetectDriftLambda', {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: 'detect-drift.handler',
       code: lambda.Code.fromAsset(join(__dirname, '/handler')),
       environment: {
-        stackNames: stacks.join(','),
         metricNamespace: metricNamespace,
+        ... stacks ? { stackNames: stacks.join(',') } : {},
       },
       timeout: Duration.minutes(1),
     });
 
-    const runEvery = props.runEvery ?? Duration.hours(1);
+    const runEvery = props?.runEvery ?? Duration.hours(1);
     new events.Rule(this, 'DetectDriftRule', {
       targets: [new eventsTargets.LambdaFunction(detectDriftLambda)],
       schedule: events.Schedule.rate(runEvery),
       enabled: true,
     });
 
-    const alarmOptions = props.alarmOptions ?? {
+    const alarmOptions = props?.alarmOptions ?? {
       alarmName: 'DriftDetected',
       threshold: 0,
       evaluationPeriods: 1,

@@ -41,6 +41,23 @@ test('lambda is created with stackNames and default metric namespace environment
   });
 });
 
+test('lambda is created with no stackNames and default metric namespace environment variables', () => {
+  // GIVEN
+  const stack = new Stack();
+
+  // WHEN
+  new DriftMonitor(stack, 'DriftMonitor');
+
+  // THEN
+  expect(stack).toHaveResource('AWS::Lambda::Function', {
+    Environment: {
+      Variables: {
+        metricNamespace: 'DriftMonitor',
+      },
+    },
+  });
+});
+
 test('lambda is created with stackNames and custom metric namespace environment variables', () => {
   // GIVEN
   const stack = new Stack();
@@ -156,40 +173,6 @@ test('when no runEvery argument then lambda is scheduled to run every hour by de
 });
 
 describe('props input validation tests', () => {
-
-  test('when no stack arguments then construct throws', () => {
-    // GIVEN
-    const stack = new Stack();
-
-    // WHEN / THEN
-    expect(() => {
-      new DriftMonitor(stack, 'DriftMonitor', {});
-    }).toThrow();
-  });
-
-  test('when stackNames is empty then construct throws', () => {
-    // GIVEN
-    const stack = new Stack();
-
-    // WHEN / THEN
-    expect(() => {
-      new DriftMonitor(stack, 'DriftMonitor', {
-        stackNames: [],
-      });
-    }).toThrow();
-  });
-
-  test('when stacks is empty then construct throws', () => {
-    // GIVEN
-    const stack = new Stack();
-
-    // WHEN / THEN
-    expect(() => {
-      new DriftMonitor(stack, 'DriftMonitor', {
-        stacks: [],
-      });
-    }).toThrow();
-  });
 
   test('when both stacks and stackNames exist then construct throws', () => {
     // GIVEN
