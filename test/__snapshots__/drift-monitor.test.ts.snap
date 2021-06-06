@@ -78,7 +78,90 @@ Object {
       },
       "Type": "AWS::Lambda::Function",
     },
-    "DriftMonitorDetectDriftLambdaPolicy70CDFE48": Object {
+    "DriftMonitorDetectDriftLambdaServiceRole87269CEC": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "DriftMonitorDetectDriftRule5AE041FA": Object {
+      "Properties": Object {
+        "ScheduleExpression": "rate(1 hour)",
+        "State": "ENABLED",
+        "Targets": Array [
+          Object {
+            "Arn": Object {
+              "Fn::GetAtt": Array [
+                "DriftMonitorDetectDriftLambdaA61B53C6",
+                "Arn",
+              ],
+            },
+            "Id": "Target0",
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "DriftMonitorDetectDriftRuleAllowEventRuleDriftMonitorDetectDriftLambdaC022EEF938D7C05C": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "DriftMonitorDetectDriftLambdaA61B53C6",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::GetAtt": Array [
+            "DriftMonitorDetectDriftRule5AE041FA",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "DriftMonitorDriftAlarm6112DE20": Object {
+      "Properties": Object {
+        "AlarmName": "DriftDetected",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "MetricName": "DriftedStacks",
+        "Namespace": "DriftMonitor",
+        "Period": 3600,
+        "Statistic": "Average",
+        "Threshold": 0,
+        "TreatMissingData": "ignore",
+        "Unit": "Count",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DriftMonitorLambdaHandlerPolicyE289F360": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -472,89 +555,6 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Policy",
-    },
-    "DriftMonitorDetectDriftLambdaServiceRole87269CEC": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "DriftMonitorDetectDriftRule5AE041FA": Object {
-      "Properties": Object {
-        "ScheduleExpression": "rate(1 hour)",
-        "State": "ENABLED",
-        "Targets": Array [
-          Object {
-            "Arn": Object {
-              "Fn::GetAtt": Array [
-                "DriftMonitorDetectDriftLambdaA61B53C6",
-                "Arn",
-              ],
-            },
-            "Id": "Target0",
-          },
-        ],
-      },
-      "Type": "AWS::Events::Rule",
-    },
-    "DriftMonitorDetectDriftRuleAllowEventRuleDriftMonitorDetectDriftLambdaC022EEF938D7C05C": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "DriftMonitorDetectDriftLambdaA61B53C6",
-            "Arn",
-          ],
-        },
-        "Principal": "events.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::GetAtt": Array [
-            "DriftMonitorDetectDriftRule5AE041FA",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "DriftMonitorDriftAlarm6112DE20": Object {
-      "Properties": Object {
-        "AlarmName": "DriftDetected",
-        "ComparisonOperator": "GreaterThanThreshold",
-        "EvaluationPeriods": 1,
-        "MetricName": "DriftedStacks",
-        "Namespace": "DriftMonitor",
-        "Period": 3600,
-        "Statistic": "Average",
-        "Threshold": 0,
-        "TreatMissingData": "ignore",
-        "Unit": "Count",
-      },
-      "Type": "AWS::CloudWatch::Alarm",
     },
   },
 }
