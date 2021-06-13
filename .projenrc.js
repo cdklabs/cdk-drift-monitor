@@ -9,6 +9,7 @@ const project = new AwsCdkConstructLibrary({
   repositoryUrl: 'https://github.com/cdklabs/cdk-drift-monitor',
   packageName: 'cdk-drift-monitor',
   projectType: ProjectType.LIB,
+  projenUpgradeSecret: 'PROJEN_GITHUB_TOKEN',
   cdkDependencies: [
     '@aws-cdk/core',
     '@aws-cdk/aws-cloudwatch',
@@ -26,6 +27,11 @@ const project = new AwsCdkConstructLibrary({
     'src/**/*.js',
   ],
   releaseToNpm: true,
+  autoApproveOptions: {
+    allowedUsernames: ['aws-cdk-automation'],
+    secret: 'GITHUB_TOKEN',
+  },
+  autoApproveUpgrades: true,
 });
 
 // A lambda handler must be ready in .js format before compilation runs in order to lambda asset to get bundled
