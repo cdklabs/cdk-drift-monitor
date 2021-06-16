@@ -56,7 +56,7 @@ export class DriftMonitor extends Construct {
       throw new Error('Must have either stacks or stackNames, not both');
     }
     const supportedDuration = [1, 3, 6, 12, 24];
-    if (props.runEvery !== undefined && !supportedDuration.includes(props.runEvery.toHours({integral: false}))) {
+    if (props.runEvery !== undefined && !supportedDuration.includes(props.runEvery.toHours({ integral: false }))) {
       throw new Error('runEvery must be either 1, 3, 6, 12 or 24 hours');
     }
 
@@ -112,7 +112,7 @@ export class DriftMonitor extends Construct {
     const timeConversionOptions = { integral: false };
     let durationInHours = duration.toHours(timeConversionOptions);
 
-    if ([1,6,24].includes(durationInHours)) {
+    if ([1, 6, 24].includes(durationInHours)) {
       return duration;
     } else if (durationInHours === 3) {
       return Duration.hours(6);
