@@ -69,7 +69,7 @@ export class DriftMonitor extends Construct {
         metricNamespace: metricNamespace,
         ... stacks ? { stackNames: stacks.join(',') } : {},
       },
-      timeout: Duration.minutes(1),
+      timeout: Duration.minutes(5),
     });
 
     const runEvery = props.runEvery ?? Duration.hours(1);
