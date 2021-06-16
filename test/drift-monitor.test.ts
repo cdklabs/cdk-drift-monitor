@@ -187,7 +187,7 @@ describe('props input validation tests', () => {
     }).toThrow();
   });
 
-  test('when runEvery < 1 minute then construct throws', () => {
+  test('when runEvery is not in supported durations then construct throws', () => {
     // GIVEN
     const stack = new Stack();
 
@@ -195,70 +195,23 @@ describe('props input validation tests', () => {
     expect(() => {
       new DriftMonitor(stack, 'DriftMonitor', {
         stackNames: ['stack1', 'stack2'],
-        runEvery: Duration.seconds(59),
+        runEvery: Duration.hours(2),
       });
     }).toThrow();
   });
 });
 
+
 describe('runEvery CloudWatch metric period tests', () => {
 
-  test('when runEvery 1 minute then period is 1 minute', () => {
+  test('when runEvery 1 hour then period is 1 hour', () => {
     // GIVEN
     const stack = new Stack();
 
     // WHEN
     new DriftMonitor(stack, 'DriftMonitor', {
       stackNames: ['stack1'],
-      runEvery: Duration.minutes(1),
-    });
-
-    // THEN
-    expect(stack).toHaveResourceLike('AWS::CloudWatch::Alarm', {
-      Period: Duration.minutes(1).toSeconds(),
-    });
-  });
-
-  test('when runEvery 4 minute then period is 5 minute', () => {
-    // GIVEN
-    const stack = new Stack();
-
-    // WHEN
-    new DriftMonitor(stack, 'DriftMonitor', {
-      stackNames: ['stack1'],
-      runEvery: Duration.minutes(4),
-    });
-
-    // THEN
-    expect(stack).toHaveResourceLike('AWS::CloudWatch::Alarm', {
-      Period: Duration.minutes(5).toSeconds(),
-    });
-  });
-
-  test('when runEvery 14 minute then period is 15 minute', () => {
-    // GIVEN
-    const stack = new Stack();
-
-    // WHEN
-    new DriftMonitor(stack, 'DriftMonitor', {
-      stackNames: ['stack1'],
-      runEvery: Duration.minutes(14),
-    });
-
-    // THEN
-    expect(stack).toHaveResourceLike('AWS::CloudWatch::Alarm', {
-      Period: Duration.minutes(15).toSeconds(),
-    });
-  });
-
-  test('when runEvery 16 minutes then period is 1 hour', () => {
-    // GIVEN
-    const stack = new Stack();
-
-    // WHEN
-    new DriftMonitor(stack, 'DriftMonitor', {
-      stackNames: ['stack1'],
-      runEvery: Duration.minutes(16),
+      runEvery: Duration.hours(1),
     });
 
     // THEN
@@ -267,14 +220,14 @@ describe('runEvery CloudWatch metric period tests', () => {
     });
   });
 
-  test('when runEvery 61 minutes then period is 6 hour', () => {
+  test('when runEvery 3 hours then period is 6 hours', () => {
     // GIVEN
     const stack = new Stack();
 
     // WHEN
     new DriftMonitor(stack, 'DriftMonitor', {
       stackNames: ['stack1'],
-      runEvery: Duration.minutes(61),
+      runEvery: Duration.hours(3),
     });
 
     // THEN
@@ -283,67 +236,19 @@ describe('runEvery CloudWatch metric period tests', () => {
     });
   });
 
-  test('when runEvery 5 hours then period is 6 hour', () => {
+  test('when runEvery 12 hours then period is 24 hours', () => {
     // GIVEN
     const stack = new Stack();
 
     // WHEN
     new DriftMonitor(stack, 'DriftMonitor', {
       stackNames: ['stack1'],
-      runEvery: Duration.hours(5),
+      runEvery: Duration.hours(12),
     });
 
     // THEN
     expect(stack).toHaveResourceLike('AWS::CloudWatch::Alarm', {
-      Period: Duration.hours(6).toSeconds(),
-    });
-  });
-
-  test('when runEvery 7 hours then period is 1 day', () => {
-    // GIVEN
-    const stack = new Stack();
-
-    // WHEN
-    new DriftMonitor(stack, 'DriftMonitor', {
-      stackNames: ['stack1'],
-      runEvery: Duration.hours(7),
-    });
-
-    // THEN
-    expect(stack).toHaveResourceLike('AWS::CloudWatch::Alarm', {
-      Period: Duration.days(1).toSeconds(),
-    });
-  });
-
-  test('when runEvery 2 days then period is 7 day', () => {
-    // GIVEN
-    const stack = new Stack();
-
-    // WHEN
-    new DriftMonitor(stack, 'DriftMonitor', {
-      stackNames: ['stack1'],
-      runEvery: Duration.days(2),
-    });
-
-    // THEN
-    expect(stack).toHaveResourceLike('AWS::CloudWatch::Alarm', {
-      Period: Duration.days(7).toSeconds(),
-    });
-  });
-
-  test('when runEvery 8 days then period is 30 day', () => {
-    // GIVEN
-    const stack = new Stack();
-
-    // WHEN
-    new DriftMonitor(stack, 'DriftMonitor', {
-      stackNames: ['stack1'],
-      runEvery: Duration.days(8),
-    });
-
-    // THEN
-    expect(stack).toHaveResourceLike('AWS::CloudWatch::Alarm', {
-      Period: Duration.days(30).toSeconds(),
+      Period: Duration.hours(24).toSeconds(),
     });
   });
 
