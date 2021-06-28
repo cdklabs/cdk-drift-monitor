@@ -3,9 +3,9 @@ import { Alarm, ComparisonOperator, Metric, Statistic, TreatMissingData, Unit } 
 import { CreateAlarmOptions } from '@aws-cdk/aws-cloudwatch/lib/metric';
 import * as events from '@aws-cdk/aws-events';
 import * as eventsTargets from '@aws-cdk/aws-events-targets';
+import { Effect, ManagedPolicy, Policy, PolicyStatement } from '@aws-cdk/aws-iam';
 import * as lambda from '@aws-cdk/aws-lambda';
 import { Construct, Duration, Stack } from '@aws-cdk/core';
-import { HandlerPolicy } from './handler-policy';
 
 
 export interface DriftMonitorProps {
@@ -70,7 +70,7 @@ export class DriftMonitor extends Construct {
         metricNamespace: metricNamespace,
         ... stacks ? { stackNames: stacks.join(',') } : {},
       },
-      timeout: Duration.minutes(1),
+      timeout: Duration.minutes(5),
     });
 
     const runEvery = props.runEvery ?? Duration.hours(1);
@@ -99,7 +99,25 @@ export class DriftMonitor extends Construct {
       ...alarmOptions,
     });
 
-    detectDriftLambda.role!.attachInlinePolicy(new HandlerPolicy(this, 'LambdaHandlerPolicy'));
+    const lambdaHandlerPolicy = new Policy(this, 'LambdaHandlerPolicy', {
+      policyName: 'DetectDriftLambdaPolicy',
+      statements: [
+        new PolicyStatement({
+          effect: Effect.ALLOW,
+          actions: [
+            'cloudformation:ListStackResources',
+            'cloudformation:DescribeStackDriftDetectionStatus',
+            'cloudformation:DetectStackDrift',
+            'cloudformation:DetectStackResourceDrift',
+            'cloudwatch:PutMetricData',
+          ],
+          resources: ['*'],
+        }),
+      ],
+    });
+    const readOnlyAccessPolicy = ManagedPolicy.fromAwsManagedPolicyName('ReadOnlyAccess');
+    detectDriftLambda.role!.attachInlinePolicy(lambdaHandlerPolicy);
+    detectDriftLambda.role!.addManagedPolicy(readOnlyAccessPolicy);
   }
 
   /**
