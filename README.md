@@ -26,17 +26,14 @@ By default, the drift detection will run every hour. This can be customized:
 
 ```typescript
 new DriftMonitor(driftDetectStack, 'DriftMonitor', {
-  runEvery: Duration.minutes(10)
+  runEvery: Duration.hours(24)
 });
 ```
 
 The construct creates an alarm with no actions. Here's an example for adding an alarm action:
 
 ```typescript
-const driftMonitor = new DriftMonitor(driftDetectStack, 'DriftMonitor', {
-  stacks: [myStack1, myStack2],
-  runEvery: Duration.minutes(10),
-});
+const driftMonitor = new DriftMonitor(driftDetectStack, 'DriftMonitor');
 driftMonitor.alarm.addAlarmAction(new SnsAction('errorTopic'))
 ```
 
@@ -45,8 +42,6 @@ driftMonitor.alarm.addAlarmAction(new SnsAction('errorTopic'))
 - [ ] Publish to Maven
 - [ ] Publish to PyPi
 - [ ] Publish to NuGet
-- [ ] Add alarm for error on lambda execution?
-- [ ] Replace long list of IAM policy statement actions with something better
 - [ ] Use [AWS Config rule `cloudformation-stack-drift-detection-check`](https://docs.aws.amazon.com/config/latest/developerguide/cloudformation-stack-drift-detection-check.html) instead of custom lambda 
 
 ## Security
