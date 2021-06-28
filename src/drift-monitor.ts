@@ -55,8 +55,9 @@ export class DriftMonitor extends Construct {
     if ((props.stacks !== undefined && props.stacks.length > 0) && (props.stackNames !== undefined && props.stackNames.length > 0)) {
       throw new Error('Must have either stacks or stackNames, not both');
     }
-    if (props.runEvery !== undefined && props.runEvery.toSeconds() < 60) {
-      throw new Error('runEvery must be higher than 1 minute');
+    const supportedDuration = [1, 3, 6, 12, 24];
+    if (props.runEvery !== undefined && !supportedDuration.includes(props.runEvery.toHours({ integral: false }))) {
+      throw new Error('runEvery must be either 1, 3, 6, 12 or 24 hours');
     }
 
     const stacks = props.stacks?.map(stack => stack.stackName) ?? props.stackNames;
@@ -120,29 +121,23 @@ export class DriftMonitor extends Construct {
   }
 
   /**
-   * While construct consumer may provide almost any duration, the relevant CloudWatch metric period ranges are:
-   * 1 minute, 5 minutes, 15 minutes, 1 hour, 6 hours, 1 day, 7 days, 30 days.
+   * CloudWatch supported period values are: 1 hour, 6 hours, 1 day, 7 days, 30 days.
+   * Other durations will transform to one of the supported period values
    *
    * @return Duration - the closest CloudWatch period.
    */
   private getClosestCloudWatchMetricPeriod(duration: Duration) {
     const timeConversionOptions = { integral: false };
-    if (duration.toMinutes(timeConversionOptions) <= 1) {
-      return Duration.minutes(1);
-    } if (duration.toMinutes(timeConversionOptions) <= 5) {
-      return Duration.minutes(5);
-    } else if (duration.toMinutes(timeConversionOptions) <= 15) {
-      return Duration.minutes(15);
-    } else if (duration.toHours(timeConversionOptions) <= 1) {
-      return Duration.hours(1);
-    } else if (duration.toHours(timeConversionOptions) <= 6) {
+    let durationInHours = duration.toHours(timeConversionOptions);
+
+    if ([1, 6, 24].includes(durationInHours)) {
+      return duration;
+    } else if (durationInHours === 3) {
       return Duration.hours(6);
-    } else if (duration.toDays(timeConversionOptions) <= 1) {
-      return Duration.days(1);
-    } else if (duration.toDays(timeConversionOptions) <= 7) {
-      return Duration.days(7);
+    } else if (durationInHours === 12) {
+      return Duration.hours(24);
     } else {
-      return Duration.days(30);
+      throw Error('Unexpected duration');
     }
   }
 
