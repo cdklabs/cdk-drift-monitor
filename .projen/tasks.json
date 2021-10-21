@@ -40,9 +40,6 @@
           "exec": "jsii --silence-warnings=reserved-word --no-fix-peer-dependencies"
         },
         {
-          "spawn": "docgen"
-        },
-        {
           "spawn": "bundle:handler/detect-drift"
         }
       ]
@@ -77,6 +74,9 @@
         },
         {
           "spawn": "package"
+        },
+        {
+          "spawn": "docgen"
         }
       ]
     },
