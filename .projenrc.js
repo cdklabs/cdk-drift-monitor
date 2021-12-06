@@ -1,5 +1,5 @@
-const { AwsCdkConstructLibrary, ProjectType } = require('projen');
-const project = new AwsCdkConstructLibrary({
+const { DependencyType, awscdk, ProjectType } = require('projen');
+const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Amazon Web Services, Inc.',
   authorAddress: 'aws-cdk-team@amazon.com',
   cdkVersion: '1.106.0',
