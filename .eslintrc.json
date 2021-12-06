@@ -145,7 +145,8 @@
       {
         "devDependencies": [
           "**/test/**",
-          "**/build-tools/**"
+          "**/build-tools/**",
+          "src/detect-drift.lambda.ts"
         ],
         "optionalDependencies": false,
         "peerDependencies": true

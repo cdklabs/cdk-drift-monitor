@@ -1,5 +1,5 @@
-const { AwsCdkConstructLibrary, ProjectType } = require('projen');
-const project = new AwsCdkConstructLibrary({
+const { DependencyType, awscdk, ProjectType } = require('projen');
+const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Amazon Web Services, Inc.',
   authorAddress: 'aws-cdk-team@amazon.com',
   cdkVersion: '1.106.0',
@@ -33,21 +33,5 @@ const project = new AwsCdkConstructLibrary({
   },
   autoApproveUpgrades: true,
 });
-
-// A lambda handler must be ready in .js format before compilation runs in order to lambda asset to get bundled
-// See https://github.com/projen/projen/issues/783
-const bundleLambdaHandlerTask = project.addTask('bundle:handler/detect-drift', {
-  description: 'bundle handler/detect-drift lambda handler',
-  exec: [
-    'esbuild',
-    '--bundle',
-    `${project.srcdir}/handler/detect-drift.ts`,
-    '--target="node14"',
-    '--platform="node"',
-    `--outfile="${project.srcdir}/handler/detect-drift.js"`,
-    '--external:aws-sdk',
-  ].join(' '),
-});
-project.compileTask.spawn(bundleLambdaHandlerTask);
 
 project.synth();
