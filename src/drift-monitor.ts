@@ -1,11 +1,10 @@
-import { join } from 'path';
 import { Alarm, ComparisonOperator, Metric, Statistic, TreatMissingData, Unit } from '@aws-cdk/aws-cloudwatch';
 import { CreateAlarmOptions } from '@aws-cdk/aws-cloudwatch/lib/metric';
 import * as events from '@aws-cdk/aws-events';
 import * as eventsTargets from '@aws-cdk/aws-events-targets';
 import { Effect, ManagedPolicy, Policy, PolicyStatement } from '@aws-cdk/aws-iam';
-import * as lambda from '@aws-cdk/aws-lambda';
 import { Construct, Duration, Stack } from '@aws-cdk/core';
+import { DetectDriftFunction } from './detect-drift-function';
 
 
 export interface DriftMonitorProps {
@@ -62,10 +61,7 @@ export class DriftMonitor extends Construct {
 
     const stacks = props.stacks?.map(stack => stack.stackName) ?? props.stackNames;
     const metricNamespace = props.metricNamespace ?? 'DriftMonitor';
-    const detectDriftLambda = new lambda.Function(this, 'DetectDriftLambda', {
-      runtime: lambda.Runtime.NODEJS_14_X,
-      handler: 'detect-drift.handler',
-      code: lambda.Code.fromAsset(join(__dirname, '/handler')),
+    const detectDriftLambda = new DetectDriftFunction(this, 'DetectDriftLambda', {
       environment: {
         metricNamespace: metricNamespace,
         ... stacks ? { stackNames: stacks.join(',') } : {},

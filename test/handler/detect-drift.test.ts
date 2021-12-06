@@ -246,6 +246,6 @@ describe('detect-drift lambda handler tests', () => {
 });
 
 async function importHandler() {
-  const { handler } = await import('../../src/handler/detect-drift');
+  const { handler } = await import('../../src/detect-drift.lambda');
   return handler;
 }

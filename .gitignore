@@ -51,4 +51,6 @@ junit.xml
 .jsii
 tsconfig.json
 !/API.md
+/assets/
+!/src/detect-drift-function.ts
 !/.github/workflows/upgrade-main.yml
