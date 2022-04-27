@@ -1,7 +1,6 @@
-import { SynthUtils } from '@aws-cdk/assert';
-import { ComparisonOperator, TreatMissingData } from '@aws-cdk/aws-cloudwatch';
-import { Duration, Stack } from '@aws-cdk/core';
-import '@aws-cdk/assert/jest';
+import { Duration, Stack } from 'aws-cdk-lib';
+import { Template } from 'aws-cdk-lib/assertions';
+import { ComparisonOperator, TreatMissingData } from 'aws-cdk-lib/aws-cloudwatch';
 import { DriftMonitor } from '../src';
 
 test('snapshot test', () => {
@@ -15,10 +14,9 @@ test('snapshot test', () => {
       new Stack(stack, 'stack2'),
     ],
   });
-  const cfnArtifact = SynthUtils.synthesize(stack);
 
   // THEN
-  expect(cfnArtifact.template).toMatchSnapshot();
+  expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
 });
 
 test('lambda is created with stackNames and default metric namespace environment variables', () => {
@@ -31,7 +29,7 @@ test('lambda is created with stackNames and default metric namespace environment
   });
 
   // THEN
-  expect(stack).toHaveResource('AWS::Lambda::Function', {
+  Template.fromStack(stack).hasResourceProperties('AWS::Lambda::Function', {
     Environment: {
       Variables: {
         stackNames: 'stack1,stack2',
@@ -49,7 +47,7 @@ test('lambda is created with no stackNames and default metric namespace environm
   new DriftMonitor(stack, 'DriftMonitor');
 
   // THEN
-  expect(stack).toHaveResource('AWS::Lambda::Function', {
+  Template.fromStack(stack).hasResourceProperties('AWS::Lambda::Function', {
     Environment: {
       Variables: {
         metricNamespace: 'DriftMonitor',
@@ -69,7 +67,7 @@ test('lambda is created with stackNames and custom metric namespace environment 
   });
 
   // THEN
-  expect(stack).toHaveResource('AWS::Lambda::Function', {
+  Template.fromStack(stack).hasResourceProperties('AWS::Lambda::Function', {
     Environment: {
       Variables: {
         stackNames: 'stack1,stack2',
@@ -89,7 +87,7 @@ test('alarm is created with default values', () => {
   });
 
   // THEN
-  expect(stack).toHaveResourceLike('AWS::CloudWatch::Alarm', {
+  Template.fromStack(stack).hasResourceProperties('AWS::CloudWatch::Alarm', {
     AlarmName: 'DriftDetected',
     Namespace: 'DriftMonitor',
     Threshold: 0,
@@ -111,7 +109,7 @@ test('alarm is created with custom metric namespace', () => {
   });
 
   // THEN
-  expect(stack).toHaveResourceLike('AWS::CloudWatch::Alarm', {
+  Template.fromStack(stack).hasResourceProperties('AWS::CloudWatch::Alarm', {
     Namespace: 'customNamespace',
   });
 });
@@ -130,7 +128,7 @@ test('alarm is created with custom alarm options', () => {
   });
 
   // THEN
-  expect(stack).toHaveResourceLike('AWS::CloudWatch::Alarm', {
+  Template.fromStack(stack).hasResourceProperties('AWS::CloudWatch::Alarm', {
     Threshold: 99,
     EvaluationPeriods: 3,
   });
@@ -147,7 +145,7 @@ test('when given metric namespace then lambda is created with expected environme
   });
 
   // THEN
-  expect(stack).toHaveResource('AWS::Lambda::Function', {
+  Template.fromStack(stack).hasResourceProperties('AWS::Lambda::Function', {
     Environment: {
       Variables: {
         stackNames: 'stack1,stack2',
@@ -167,13 +165,12 @@ test('when no runEvery argument then lambda is scheduled to run every hour by de
   });
 
   // THEN
-  expect(stack).toHaveResource('AWS::Events::Rule', {
+  Template.fromStack(stack).hasResourceProperties('AWS::Events::Rule', {
     ScheduleExpression: 'rate(1 hour)',
   });
 });
 
 describe('props input validation tests', () => {
-
   test('when both stacks and stackNames exist then construct throws', () => {
     // GIVEN
     const stack = new Stack();
@@ -215,7 +212,7 @@ describe('runEvery CloudWatch metric period tests', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::CloudWatch::Alarm', {
+    Template.fromStack(stack).hasResourceProperties('AWS::CloudWatch::Alarm', {
       Period: Duration.hours(1).toSeconds(),
     });
   });
@@ -231,7 +228,7 @@ describe('runEvery CloudWatch metric period tests', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::CloudWatch::Alarm', {
+    Template.fromStack(stack).hasResourceProperties('AWS::CloudWatch::Alarm', {
       Period: Duration.hours(6).toSeconds(),
     });
   });
@@ -247,9 +244,8 @@ describe('runEvery CloudWatch metric period tests', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::CloudWatch::Alarm', {
+    Template.fromStack(stack).hasResourceProperties('AWS::CloudWatch::Alarm', {
       Period: Duration.hours(24).toSeconds(),
     });
   });
-
 });

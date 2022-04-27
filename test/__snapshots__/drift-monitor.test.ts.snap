@@ -3,17 +3,10 @@
 exports[`snapshot test 1`] = `
 Object {
   "Parameters": Object {
-    "AssetParametersb2a01d76b8232d512577089469be5f783853cbe2d70399197a445355a3993176ArtifactHash458C3DD6": Object {
-      "Description": "Artifact hash for asset \\"b2a01d76b8232d512577089469be5f783853cbe2d70399197a445355a3993176\\"",
-      "Type": "String",
-    },
-    "AssetParametersb2a01d76b8232d512577089469be5f783853cbe2d70399197a445355a3993176S3BucketA5E98A04": Object {
-      "Description": "S3 bucket for asset \\"b2a01d76b8232d512577089469be5f783853cbe2d70399197a445355a3993176\\"",
-      "Type": "String",
-    },
-    "AssetParametersb2a01d76b8232d512577089469be5f783853cbe2d70399197a445355a3993176S3VersionKey4CC9FA34": Object {
-      "Description": "S3 key for asset version \\"b2a01d76b8232d512577089469be5f783853cbe2d70399197a445355a3993176\\"",
-      "Type": "String",
+    "BootstrapVersion": Object {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
     },
   },
   "Resources": Object {
@@ -24,45 +17,14 @@ Object {
       "Properties": Object {
         "Code": Object {
           "S3Bucket": Object {
-            "Ref": "AssetParametersb2a01d76b8232d512577089469be5f783853cbe2d70399197a445355a3993176S3BucketA5E98A04",
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                Object {
-                  "Fn::Select": Array [
-                    0,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParametersb2a01d76b8232d512577089469be5f783853cbe2d70399197a445355a3993176S3VersionKey4CC9FA34",
-                        },
-                      ],
-                    },
-                  ],
-                },
-                Object {
-                  "Fn::Select": Array [
-                    1,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParametersb2a01d76b8232d512577089469be5f783853cbe2d70399197a445355a3993176S3VersionKey4CC9FA34",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            ],
-          },
+          "S3Key": "95eee1bcd7b6cb9106c758dbde9540c89cdf0189ff3bb4d799ea243804aaa455.zip",
         },
         "Description": "src/detect-drift.lambda.ts",
         "Environment": Object {
           "Variables": Object {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
             "metricNamespace": "DriftMonitor",
             "stackNames": "stack1,stack2",
           },
@@ -200,6 +162,33 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+  },
+  "Rules": Object {
+    "CheckBootstrapVersion": Object {
+      "Assertions": Array [
+        Object {
+          "Assert": Object {
+            "Fn::Not": Array [
+              Object {
+                "Fn::Contains": Array [
+                  Array [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  Object {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
     },
   },
 }
