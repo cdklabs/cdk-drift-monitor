@@ -16,28 +16,22 @@ describe('detect-drift lambda handler tests', () => {
     process.env = ORIGINAL_PROCESS_ENV;
   });
 
-  test('when all env variables missing then throw', async (done) => {
+  test('when all env variables missing then throw', async () => {
     const handler = await importHandler();
-    handler().catch(e => {
-      expect(e.toString()).toContain('Missing environment variables');
-      done();
-    });
+    await expect(handler()).rejects.toThrow(/Missing environment variables/);
   });
 
-  test('when metricNamespace env variables missing then throw', async (done) => {
+  test('when metricNamespace env variables missing then throw', async () => {
     // GIVEN
     process.env.stackNames = 'stack';
 
     // WHEN / THEN
     const handler = await importHandler();
-    handler().catch(e => {
-      expect(e.toString()).toContain('Missing environment variables');
-      done();
-    });
+    await expect(handler()).rejects.toThrow(/Missing environment variables/);
   });
 
 
-  test('when stack not found then throw', async (done) => {
+  test('when stack not found then throw', async () => {
     // GIVEN
     process.env.stackNames = 'stack';
     process.env.metricNamespace = 'someNamespace';
@@ -51,10 +45,7 @@ describe('detect-drift lambda handler tests', () => {
 
     // THEN
     const handler = await importHandler();
-    handler().catch(e => {
-      expect(e.toString()).toContain('One or more stacks not found');
-      done();
-    });
+    await expect(handler()).rejects.toThrow(/One or more stacks not found/);
   });
 
   const ineligibleStatuses = [
@@ -78,7 +69,7 @@ describe('detect-drift lambda handler tests', () => {
     'IMPORT_ROLLBACK_FAILED',
     'IMPORT_ROLLBACK_COMPLETE',
   ];
-  each(ineligibleStatuses).test('when stack status is in %s status then emit 0 drifts', async (stackStatus: string, done) => {
+  each(ineligibleStatuses).test('when stack status is in %s status then emit 0 drifts', async (stackStatus: string) => {
     // GIVEN
     process.env.stackNames = 'stack';
     process.env.metricNamespace = 'someNamespace';
@@ -92,13 +83,11 @@ describe('detect-drift lambda handler tests', () => {
 
     // THEN
     const handler = await importHandler();
-    void handler().then(() => {
-      expect(detectDriftMockManager.getDriftMetricValue()).toBe(0);
-      done();
-    });
+    await handler();
+    expect(detectDriftMockManager.getDriftMetricValue()).toBe(0);
   });
 
-  test('when stack has no drifts then emit 0 drifts', async (done) => {
+  test('when stack has no drifts then emit 0 drifts', async () => {
     // GIVEN
     process.env.stackNames = 'stack';
     process.env.metricNamespace = 'someNamespace';
@@ -113,13 +102,11 @@ describe('detect-drift lambda handler tests', () => {
 
     // THEN
     const handler = await importHandler();
-    void handler().then(() => {
-      expect(detectDriftMockManager.getDriftMetricValue()).toBe(0);
-      done();
-    });
+    await handler();
+    expect(detectDriftMockManager.getDriftMetricValue()).toBe(0);
   });
 
-  test('when stack has drift then emit 1 drifts', async (done) => {
+  test('when stack has drift then emit 1 drifts', async () => {
     // GIVEN
     process.env.stackNames = 'stack';
     process.env.metricNamespace = 'someNamespace';
@@ -134,13 +121,11 @@ describe('detect-drift lambda handler tests', () => {
 
     // THEN
     const handler = await importHandler();
-    void handler().then(() => {
-      expect(detectDriftMockManager.getDriftMetricValue()).toBe(1);
-      done();
-    });
+    await handler();
+    expect(detectDriftMockManager.getDriftMetricValue()).toBe(1);
   });
 
-  test('when detection status in progress and then call until status completed', async (done) => {
+  test('when detection status in progress and then call until status completed', async () => {
     // GIVEN
     process.env.stackNames = 'stack';
     process.env.metricNamespace = 'someNamespace';
@@ -156,13 +141,11 @@ describe('detect-drift lambda handler tests', () => {
 
     // THEN
     const handler = await importHandler();
-    void handler().then(() => {
-      expect(detectDriftMockManager.getDriftMetricValue()).toBe(1);
-      done();
-    });
+    await handler();
+    expect(detectDriftMockManager.getDriftMetricValue()).toBe(1);
   });
 
-  test('when detection status is failed then throw', async (done) => {
+  test('when detection status is failed then throw', async () => {
     // GIVEN
     process.env.stackNames = 'stack';
     process.env.metricNamespace = 'someNamespace';
@@ -177,13 +160,10 @@ describe('detect-drift lambda handler tests', () => {
 
     // THEN
     const handler = await importHandler();
-    void handler().catch((e) => {
-      expect(e.toString()).toContain('Detection failed');
-      done();
-    });
+    await expect(handler()).rejects.toThrow(/Detection failed/);
   });
 
-  test('when 3 stacks have 2 drifts have then emit 2 drifts', async (done) => {
+  test('when 3 stacks have 2 drifts have then emit 2 drifts', async () => {
     // GIVEN
     process.env.stackNames = 'stack1,stack2,stack3';
     process.env.metricNamespace = 'someNamespace';
@@ -210,14 +190,12 @@ describe('detect-drift lambda handler tests', () => {
 
     // THEN
     const handler = await importHandler();
-    void handler().then(() => {
-      expect(detectDriftMockManager.getDriftMetricValue()).toBe(2);
-      done();
-    });
+    await handler();
+    expect(detectDriftMockManager.getDriftMetricValue()).toBe(2);
   });
 
 
-  test('when stackNames env variables missing then detect drift on all stacks', async (done) => {
+  test('when stackNames env variables missing then detect drift on all stacks', async () => {
     // GIVEN
     process.env.metricNamespace = 'someNamespace';
 
@@ -238,10 +216,8 @@ describe('detect-drift lambda handler tests', () => {
 
     // THEN
     const handler = await importHandler();
-    void handler().then(() => {
-      expect(detectDriftMockManager.getDriftMetricValue()).toBe(2);
-      done();
-    });
+    await handler();
+    expect(detectDriftMockManager.getDriftMetricValue()).toBe(2);
   });
 });
 

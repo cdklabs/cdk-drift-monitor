@@ -6,6 +6,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   cdkVersion: '2.1.0',
   defaultReleaseBranch: 'main',
   name: 'cdk-drift-monitor',
+  minNodeVersion: '14.18.0',
   description: 'Monitors for CloudFormation stack drifts',
   repositoryUrl: 'https://github.com/cdklabs/cdk-drift-monitor',
   packageName: 'cdk-drift-monitor',
