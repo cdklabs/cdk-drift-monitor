@@ -42,9 +42,9 @@
     "@types/node": "^14",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
-    "aws-cdk-lib": "2.58.1",
-    "aws-sdk": "^2.1286.0",
-    "constructs": "^10.1.208",
+    "aws-cdk-lib": "2.59.0",
+    "aws-sdk": "^2.1287.0",
+    "constructs": "^10.1.209",
     "esbuild": "^0.16.13",
     "eslint": "^8",
     "eslint-import-resolver-node": "^0.3.6",
@@ -59,7 +59,7 @@
     "jsii-pacmak": "^1.72.0",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^16",
-    "projen": "^0.65.79",
+    "projen": "^0.65.80",
     "standard-version": "^9",
     "ts-jest": "^27",
     "typescript": "^4.9.4"
@@ -69,8 +69,8 @@
     "constructs": "^10.0.5"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.58.1",
-    "constructs": "^10.1.208"
+    "aws-cdk-lib": "2.59.0",
+    "constructs": "^10.1.209"
   },
   "keywords": [
     "cdk"
