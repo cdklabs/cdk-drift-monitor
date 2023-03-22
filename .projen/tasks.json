@@ -55,7 +55,7 @@
       "description": "Create a JavaScript bundle from src/detect-drift.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/detect-drift.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/detect-drift.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/detect-drift.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/detect-drift.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
         }
       ]
     },
@@ -64,7 +64,7 @@
       "description": "Continuously update the JavaScript bundle from src/detect-drift.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/detect-drift.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/detect-drift.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/detect-drift.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/detect-drift.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
         }
       ]
     },
@@ -297,19 +297,19 @@
           "exec": "yarn upgrade npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='jsii'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='jsii'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='jsii'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='jsii'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='jsii'"
         },
         {
           "exec": "yarn install --check-files"
