@@ -175,6 +175,26 @@
         }
       ]
     },
+    "integ": {
+      "name": "integ",
+      "description": "Run integration snapshot tests",
+      "steps": [
+        {
+          "exec": "yarn integ-runner --language typescript",
+          "receiveArgs": true
+        }
+      ]
+    },
+    "integ:update": {
+      "name": "integ:update",
+      "description": "Run and update integration snapshot tests",
+      "steps": [
+        {
+          "exec": "yarn integ-runner --language typescript --update-on-failed",
+          "receiveArgs": true
+        }
+      ]
+    },
     "package": {
       "name": "package",
       "description": "Creates the distribution package",
@@ -208,6 +228,9 @@
       "steps": [
         {
           "spawn": "docgen"
+        },
+        {
+          "spawn": "rosetta:extract"
         }
       ]
     },
@@ -248,16 +271,38 @@
         }
       ]
     },
+    "rosetta:extract": {
+      "name": "rosetta:extract",
+      "description": "Test rosetta extract",
+      "steps": [
+        {
+          "exec": "yarn --silent jsii-rosetta extract --strict"
+        }
+      ]
+    },
     "test": {
       "name": "test",
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --coverageProvider=v8 --updateSnapshot",
+          "exec": "jest --passWithNoTests --coverageProvider=v8 --ci",
           "receiveArgs": true
         },
         {
           "spawn": "eslint"
+        },
+        {
+          "spawn": "integ"
+        }
+      ]
+    },
+    "test:update": {
+      "name": "test:update",
+      "description": "Update jest snapshots",
+      "steps": [
+        {
+          "exec": "jest --updateSnapshot --passWithNoTests --coverageProvider=v8 --ci",
+          "receiveArgs": true
         }
       ]
     },
@@ -297,19 +342,19 @@
           "exec": "yarn upgrade npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='jsii'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='jsii,@aws-cdk/integ-tests-alpha'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='jsii'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='jsii,@aws-cdk/integ-tests-alpha'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='jsii'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='jsii,@aws-cdk/integ-tests-alpha'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='jsii'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='jsii,@aws-cdk/integ-tests-alpha'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='jsii'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='jsii,@aws-cdk/integ-tests-alpha'"
         },
         {
           "exec": "yarn install --check-files"
@@ -322,6 +367,30 @@
         },
         {
           "spawn": "post-upgrade"
+        }
+      ]
+    },
+    "upgrade-cdklabs-projen-project-types": {
+      "name": "upgrade-cdklabs-projen-project-types",
+      "description": "upgrade cdklabs-projen-project-types",
+      "env": {
+        "CI": "0"
+      },
+      "steps": [
+        {
+          "exec": "yarn upgrade npm-check-updates"
+        },
+        {
+          "exec": "npm-check-updates --filter=cdklabs-projen-project-types --upgrade"
+        },
+        {
+          "exec": "yarn install --check-files"
+        },
+        {
+          "exec": "yarn upgrade cdklabs-projen-project-types"
+        },
+        {
+          "exec": "npx projen"
         }
       ]
     },
