@@ -2,13 +2,13 @@
 
 Monitors for CloudFormation stack drifts. By default, detects drifts for all stacks:
 
-```typescript
+```ts
 new DriftMonitor(driftDetectStack, 'DriftMonitor');
 ```
 
 You can also specify a list of stacks to detect drifts:
 
-```typescript
+```ts
 new DriftMonitor(driftDetectStack, 'DriftMonitor', {
   stacks: [myStack1, myStack2],
 });
@@ -16,7 +16,7 @@ new DriftMonitor(driftDetectStack, 'DriftMonitor', {
 
 It can also be initialized by providing stack names:
 
-```typescript
+```ts
 new DriftMonitor(driftDetectStack, 'DriftMonitor', {
   stackNames: ['myStack1', 'myStack2'],
 });
@@ -24,17 +24,21 @@ new DriftMonitor(driftDetectStack, 'DriftMonitor', {
 
 By default, the drift detection will run every hour. This can be customized:
 
-```typescript
+```ts
 new DriftMonitor(driftDetectStack, 'DriftMonitor', {
-  runEvery: Duration.hours(24)
+  runEvery: Duration.hours(24),
 });
 ```
 
 The construct creates an alarm with no actions. Here's an example for adding an alarm action:
 
-```typescript
+```ts
+import * as sns from 'aws-cdk-lib/aws-sns';
+import { SnsAction } from 'aws-cdk-lib/aws-cloudwatch-actions';
+
 const driftMonitor = new DriftMonitor(driftDetectStack, 'DriftMonitor');
-driftMonitor.alarm.addAlarmAction(new SnsAction('errorTopic'))
+const topic = new sns.Topic(this, 'errorTopic');
+driftMonitor.alarm.addAlarmAction(new SnsAction(topic));
 ```
 
 ## Roadmap

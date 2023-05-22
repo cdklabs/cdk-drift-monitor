@@ -2,7 +2,13 @@
 import { Construct } from 'constructs';
 import {
   Stack,
+  Duration,
 } from 'aws-cdk-lib';
+import { DriftMonitor } from './src';
+
+declare const driftDetectStack: Stack;
+declare const myStack1: Stack;
+declare const myStack2: Stack;
 
 class Fixture extends Stack {
   constructor(scope: Construct, id: string) {
