@@ -1,7 +1,8 @@
-const { awscdk } = require('projen');
+import { awscdk } from 'projen';
 
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Amazon Web Services, Inc.',
+  projenrcTs: true,
   authorAddress: 'aws-cdk-team@amazon.com',
   cdkVersion: '2.1.0',
   defaultReleaseBranch: 'main',
@@ -10,7 +11,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
   description: 'Monitors for CloudFormation stack drifts',
   repositoryUrl: 'https://github.com/cdklabs/cdk-drift-monitor',
   packageName: 'cdk-drift-monitor',
-  projenUpgradeSecret: 'PROJEN_GITHUB_TOKEN',
   deps: [
     'aws-cdk-lib',
     'constructs',
