@@ -50,9 +50,9 @@
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "aws-cdk-lib": "2.81.0",
-    "aws-sdk": "^2.1386.0",
+    "aws-sdk": "^2.1387.0",
     "cdklabs-projen-project-types": "^0.1.115",
-    "constructs": "^10.2.37",
+    "constructs": "^10.2.38",
     "esbuild": "^0.17.19",
     "eslint": "^8",
     "eslint-import-resolver-node": "^0.3.7",
@@ -78,7 +78,7 @@
   },
   "dependencies": {
     "aws-cdk-lib": "2.81.0",
-    "constructs": "^10.2.37"
+    "constructs": "^10.2.38"
   },
   "resolutions": {
     "@types/babel__traverse": "7.18.2",
