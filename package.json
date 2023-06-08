@@ -42,16 +42,16 @@
     "organization": true
   },
   "devDependencies": {
-    "@aws-cdk/integ-runner": "^2",
+    "@aws-cdk/integ-runner": "latest",
     "@aws-cdk/integ-tests-alpha": "latest",
     "@types/jest": "^27",
     "@types/node": "^16",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
-    "aws-cdk-lib": "2.82.0",
-    "aws-sdk": "^2.1392.0",
-    "cdklabs-projen-project-types": "^0.1.125",
-    "constructs": "^10.2.45",
+    "aws-cdk-lib": "2.83.0",
+    "aws-sdk": "^2.1393.0",
+    "cdklabs-projen-project-types": "^0.1.128",
+    "constructs": "^10.2.46",
     "esbuild": "^0.17.19",
     "eslint": "^8",
     "eslint-import-resolver-node": "^0.3.7",
@@ -61,11 +61,11 @@
     "jest-each": "^26.6.2",
     "jest-junit": "^15",
     "jsii": "1.x",
-    "jsii-diff": "^1.82.0",
+    "jsii-diff": "^1.83.0",
     "jsii-docgen": "^1.8.110",
-    "jsii-pacmak": "^1.82.0",
+    "jsii-pacmak": "^1.83.0",
     "npm-check-updates": "^16",
-    "projen": "^0.71.84",
+    "projen": "^0.71.85",
     "standard-version": "^9",
     "ts-jest": "^27",
     "ts-node": "^10.9.1",
@@ -76,8 +76,8 @@
     "constructs": "^10.0.5"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.82.0",
-    "constructs": "^10.2.45"
+    "aws-cdk-lib": "2.83.0",
+    "constructs": "^10.2.46"
   },
   "resolutions": {
     "@types/babel__traverse": "7.18.2",
