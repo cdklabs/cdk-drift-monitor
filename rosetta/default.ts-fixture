@@ -4,7 +4,7 @@ import {
   Stack,
   Duration,
 } from 'aws-cdk-lib';
-import { DriftMonitor } from './src';
+import { DriftMonitor } from './lib';
 
 declare const driftDetectStack: Stack;
 declare const myStack1: Stack;
