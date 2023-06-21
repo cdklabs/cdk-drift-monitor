@@ -84,6 +84,10 @@
       "type": "build"
     },
     {
+      "name": "jsii-rosetta",
+      "type": "build"
+    },
+    {
       "name": "jsii",
       "version": "1.x",
       "type": "build"
