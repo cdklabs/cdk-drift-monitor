@@ -46,12 +46,12 @@
     "@aws-cdk/integ-tests-alpha": "latest",
     "@types/jest": "^27",
     "@types/node": "^16",
-    "@typescript-eslint/eslint-plugin": "^5",
-    "@typescript-eslint/parser": "^5",
+    "@typescript-eslint/eslint-plugin": "^6",
+    "@typescript-eslint/parser": "^6",
     "aws-cdk-lib": "2.93.0",
-    "aws-sdk": "^2.1446.0",
+    "aws-sdk": "^2.1447.0",
     "cdklabs-projen-project-types": "^0.1.162",
-    "constructs": "^10.2.69",
+    "constructs": "^10.2.70",
     "esbuild": "^0.19.2",
     "eslint": "^8",
     "eslint-import-resolver-node": "^0.3.9",
@@ -66,7 +66,7 @@
     "jsii-pacmak": "^1.88.0",
     "jsii-rosetta": "^5.1.11",
     "npm-check-updates": "^16",
-    "projen": "^0.72.28",
+    "projen": "^0.73.0",
     "standard-version": "^9",
     "ts-jest": "^27",
     "ts-node": "^10.9.1",
@@ -78,7 +78,7 @@
   },
   "dependencies": {
     "aws-cdk-lib": "2.93.0",
-    "constructs": "^10.2.69"
+    "constructs": "^10.2.70"
   },
   "resolutions": {
     "@types/babel__traverse": "7.18.2",
