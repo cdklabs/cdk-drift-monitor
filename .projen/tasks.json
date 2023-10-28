@@ -56,7 +56,7 @@
       "description": "Create a JavaScript bundle from src/detect-drift.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/detect-drift.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/detect-drift.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/detect-drift.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/detect-drift.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/*"
         }
       ]
     },
@@ -65,7 +65,7 @@
       "description": "Continuously update the JavaScript bundle from src/detect-drift.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/detect-drift.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/detect-drift.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/detect-drift.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/detect-drift.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --watch"
         }
       ]
     },
@@ -334,13 +334,13 @@
           "exec": "yarn upgrade npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,aws-cdk-lib,aws-sdk,cdklabs-projen-project-types,constructs,esbuild,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint,jest-each,jest-junit,jest,jsii-diff,jsii-docgen,jsii-pacmak,jsii-rosetta,npm-check-updates,projen,standard-version,ts-jest,ts-node,typescript"
+          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,aws-cdk-lib,aws-sdk,cdklabs-projen-project-types,esbuild,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint,jest-each,jest-junit,jest,jsii-diff,jsii-docgen,jsii-pacmak,jsii-rosetta,npm-check-updates,projen,standard-version,ts-jest,ts-node,typescript,constructs"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk-lib aws-sdk cdklabs-projen-project-types constructs esbuild eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest-each jest-junit jest jsii-diff jsii-docgen jsii-pacmak jsii-rosetta npm-check-updates projen standard-version ts-jest ts-node typescript"
+          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk-lib aws-sdk cdklabs-projen-project-types esbuild eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest-each jest-junit jest jsii-diff jsii-docgen jsii-pacmak jsii-rosetta npm-check-updates projen standard-version ts-jest ts-node typescript constructs"
         },
         {
           "exec": "npx projen"

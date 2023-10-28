@@ -33,10 +33,6 @@
       "type": "build"
     },
     {
-      "name": "constructs",
-      "type": "build"
-    },
-    {
       "name": "esbuild",
       "type": "build"
     },
