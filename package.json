@@ -75,8 +75,8 @@
     "constructs": "^10.0.5"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.93.0",
-    "constructs": "^10.2.70"
+    "aws-cdk-lib": "2.110.1",
+    "constructs": "^10.3.0"
   },
   "resolutions": {
     "@types/babel__traverse": "7.18.2",
