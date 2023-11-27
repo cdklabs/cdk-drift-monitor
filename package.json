@@ -52,7 +52,7 @@
     "aws-cdk-lib": "2.110.1",
     "aws-sdk": "^2.1502.0",
     "cdklabs-projen-project-types": "^0.1.182",
-    "esbuild": "^0.19.7",
+    "esbuild": "^0.19.8",
     "eslint": "^8",
     "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-import": "^2.29.0",
