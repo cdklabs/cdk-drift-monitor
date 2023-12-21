@@ -10,9 +10,6 @@ const project = new CdklabsConstructLibrary({
   defaultReleaseBranch: 'main',
   name: 'cdk-drift-monitor',
 
-  workflowNodeVersion: '16.x',
-  minNodeVersion: '16.0.0',
-
   description: 'Monitors for CloudFormation stack drifts',
   repositoryUrl: 'https://github.com/cdklabs/cdk-drift-monitor',
   packageName: 'cdk-drift-monitor',
