@@ -50,7 +50,7 @@
     "@typescript-eslint/eslint-plugin": "^7",
     "@typescript-eslint/parser": "^7",
     "aws-cdk-lib": "2.151.0",
-    "aws-sdk": "^2.1670.0",
+    "aws-sdk": "^2.1671.0",
     "cdklabs-projen-project-types": "^0.1.200",
     "esbuild": "^0.23.0",
     "eslint": "^8",
