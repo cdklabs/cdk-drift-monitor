@@ -19,7 +19,7 @@ Object {
           "S3Bucket": Object {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "4de9d21f0fc7c11ad3b92dccbbcbe9ea69717c9d9ca9638cedd5e4dc88f6eb7b.zip",
+          "S3Key": "e416fd5e1254dd64cb33c4315471020cac2f705f0b484ac9606da65fcc7c285b.zip",
         },
         "Description": "src/detect-drift.lambda.ts",
         "Environment": Object {
