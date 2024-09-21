@@ -3,7 +3,7 @@
   "description": "Monitors for CloudFormation stack drifts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cdklabs/cdk-drift-monitor.git"
+    "url": "https://github.com/cdklabs/cdk-drift-monitor"
   },
   "scripts": {
     "build": "npx projen build",
@@ -51,7 +51,7 @@
     "@typescript-eslint/parser": "^7",
     "aws-cdk-lib": "2.1.0",
     "aws-sdk": "^2.1691.0",
-    "cdklabs-projen-project-types": "^0.1.202",
+    "cdklabs-projen-project-types": "^0.1.204",
     "commit-and-tag-version": "^12",
     "esbuild": "^0.23.1",
     "eslint": "^8",
