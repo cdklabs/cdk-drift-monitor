@@ -58,30 +58,7 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-drift-monitor.DriftMonitor.createRoot">createRoot</a></code> | Creates a new root construct node. |
 | <code><a href="#cdk-drift-monitor.DriftMonitor.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-
----
-
-##### `createRoot` <a name="createRoot" id="cdk-drift-monitor.DriftMonitor.createRoot"></a>
-
-```typescript
-import { DriftMonitor } from 'cdk-drift-monitor'
-
-DriftMonitor.createRoot(id?: string)
-```
-
-Creates a new root construct node.
-
-###### `id`<sup>Optional</sup> <a name="id" id="cdk-drift-monitor.DriftMonitor.createRoot.parameter.id"></a>
-
-- *Type:* string
-
-The scoped construct ID.
-
-Must be unique amongst siblings. If
-the ID includes a path separator (`/`), then it will be replaced by double
-dash `--`.
 
 ---
 
