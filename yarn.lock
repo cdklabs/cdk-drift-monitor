@@ -45,12 +45,12 @@
     "@cdklabs/tskb" "^0.0.3"
 
 "@aws-cdk/cloud-assembly-schema@^39.2.0":
-  version "39.2.8"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-schema/-/cloud-assembly-schema-39.2.8.tgz#2e953547e3d67487179090a82dac7d9c0a6de723"
-  integrity sha512-VkppFgLbm5M1/K8S+BimI/0COq+E9fCDcdDyAe4gFizHNZTALZA4sMds2kug1rtPFKCcWAexrycs2D4iQHcRCw==
+  version "39.2.9"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-schema/-/cloud-assembly-schema-39.2.9.tgz#17bebe8b1fffcc5f1e6fbf024d44b6fb60cad9a9"
+  integrity sha512-Ao4C8WoM5wgU4yn0aKLvI4gtgiRDa+8bVVwOlhGK9/jHmZlgMZY44UY9muq6qMKsMXTmfQeaB8LS3JLOiEUheA==
   dependencies:
     jsonschema "~1.4.1"
-    semver "^7.6.3"
+    semver "^7.7.0"
 
 "@aws-cdk/integ-runner@latest":
   version "2.177.0-alpha.0"
