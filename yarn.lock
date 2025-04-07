@@ -22,9 +22,9 @@
     lru-cache "^10.4.3"
 
 "@aws-cdk/asset-awscli-v1@^2.2.229":
-  version "2.2.230"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/asset-awscli-v1/-/asset-awscli-v1-2.2.230.tgz#6a39f8849ca99fddbad2fac96cbd8f81e33c8406"
-  integrity sha512-kUnhKIYu42hqBa6a8x2/7o29ObpJgjYGQy28lZDq9awXyvpR62I2bRxrNKNR3uFUQz3ySuT9JXhGHhuZPdbnFw==
+  version "2.2.231"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/asset-awscli-v1/-/asset-awscli-v1-2.2.231.tgz#82805ae5ceed1fbfcc71e7fb5c5a1804c5cd4af8"
+  integrity sha512-vPqD/K2pK/ALhU5r5Nafdc2nLB+LJKxNyxUmQnLsazU6AWDJfkqjHQx8m3J4Cjl2C3chQkIRMdzSDuXIlo43GA==
 
 "@aws-cdk/asset-node-proxy-agent-v6@^2.1.0":
   version "2.1.0"
