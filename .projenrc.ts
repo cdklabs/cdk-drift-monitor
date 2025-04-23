@@ -1,4 +1,5 @@
 import { CdklabsConstructLibrary } from 'cdklabs-projen-project-types';
+import { awscdk } from 'projen';
 
 const project = new CdklabsConstructLibrary({
   author: 'Amazon Web Services, Inc.',
@@ -42,6 +43,9 @@ const project = new CdklabsConstructLibrary({
     secret: 'GITHUB_TOKEN',
   },
   autoApproveUpgrades: true,
+  lambdaOptions: {
+    runtime: awscdk.LambdaRuntime.NODEJS_20_X,
+  },
 });
 
 project.synth();
