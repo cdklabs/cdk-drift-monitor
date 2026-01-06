@@ -1,6 +1,7 @@
 import { Duration, Stack } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import { ComparisonOperator, TreatMissingData } from 'aws-cdk-lib/aws-cloudwatch';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { DriftMonitor } from '../src';
 
 test('snapshot test', () => {
@@ -247,5 +248,52 @@ describe('runEvery CloudWatch metric period tests', () => {
     Template.fromStack(stack).hasResourceProperties('AWS::CloudWatch::Alarm', {
       Period: Duration.hours(24).toSeconds(),
     });
+  });
+});
+
+
+describe('runtime configuration tests', () => {
+  test('when no runtime specified then uses latest Node.js runtime', () => {
+    // GIVEN
+    const stack = new Stack();
+
+    // WHEN
+    new DriftMonitor(stack, 'DriftMonitor', {
+      stackNames: ['stack1'],
+    });
+
+    // THEN
+    Template.fromStack(stack).hasResourceProperties('AWS::Lambda::Function', {
+      Runtime: 'nodejs22.x', // Latest available in the region
+    });
+  });
+
+  test('when custom Node.js runtime specified then uses that runtime', () => {
+    // GIVEN
+    const stack = new Stack();
+
+    // WHEN
+    new DriftMonitor(stack, 'DriftMonitor', {
+      stackNames: ['stack1'],
+      lambdaRuntime: lambda.Runtime.NODEJS_20_X,
+    });
+
+    // THEN
+    Template.fromStack(stack).hasResourceProperties('AWS::Lambda::Function', {
+      Runtime: 'nodejs20.x',
+    });
+  });
+
+  test('when non-Node.js runtime specified then throws error', () => {
+    // GIVEN
+    const stack = new Stack();
+
+    // WHEN / THEN
+    expect(() => {
+      new DriftMonitor(stack, 'DriftMonitor', {
+        stackNames: ['stack1'],
+        lambdaRuntime: lambda.Runtime.PYTHON_3_12,
+      });
+    }).toThrow('DetectDriftFunction only supports Node.js runtimes, but python3.12 was provided');
   });
 });

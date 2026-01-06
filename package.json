@@ -8,9 +8,6 @@
   "scripts": {
     "build": "npx projen build",
     "bump": "npx projen bump",
-    "bundle": "npx projen bundle",
-    "bundle:detect-drift.lambda": "npx projen bundle:detect-drift.lambda",
-    "bundle:detect-drift.lambda:watch": "npx projen bundle:detect-drift.lambda:watch",
     "clobber": "npx projen clobber",
     "compat": "npx projen compat",
     "compile": "npx projen compile",

@@ -49,8 +49,6 @@ junit.xml
 .jsii
 tsconfig.json
 !/API.md
-/assets/
-!/src/detect-drift-function.ts
 .jsii.tabl.json
 !/rosetta/default.ts-fixture
 !/.github/workflows/retry-automerge.yml

@@ -43,33 +43,6 @@
       ],
       "condition": "git log --oneline -1 | grep -qv \"chore(release):\""
     },
-    "bundle": {
-      "name": "bundle",
-      "description": "Prepare assets",
-      "steps": [
-        {
-          "spawn": "bundle:detect-drift.lambda"
-        }
-      ]
-    },
-    "bundle:detect-drift.lambda": {
-      "name": "bundle:detect-drift.lambda",
-      "description": "Create a JavaScript bundle from src/detect-drift.lambda.ts",
-      "steps": [
-        {
-          "exec": "esbuild --bundle src/detect-drift.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/detect-drift.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/*"
-        }
-      ]
-    },
-    "bundle:detect-drift.lambda:watch": {
-      "name": "bundle:detect-drift.lambda:watch",
-      "description": "Continuously update the JavaScript bundle from src/detect-drift.lambda.ts",
-      "steps": [
-        {
-          "exec": "esbuild --bundle src/detect-drift.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/detect-drift.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --watch"
-        }
-      ]
-    },
     "clobber": {
       "name": "clobber",
       "description": "hard resets to HEAD of origin and cleans the local repo",
@@ -252,12 +225,7 @@
     },
     "pre-compile": {
       "name": "pre-compile",
-      "description": "Prepare the project for compilation",
-      "steps": [
-        {
-          "spawn": "bundle"
-        }
-      ]
+      "description": "Prepare the project for compilation"
     },
     "release": {
       "name": "release",

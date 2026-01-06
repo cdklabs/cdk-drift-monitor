@@ -143,6 +143,7 @@ const driftMonitorProps: DriftMonitorProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-drift-monitor.DriftMonitorProps.property.alarmOptions">alarmOptions</a></code> | <code>aws-cdk-lib.aws_cloudwatch.CreateAlarmOptions</code> | Options to create alarm. |
+| <code><a href="#cdk-drift-monitor.DriftMonitorProps.property.lambdaRuntime">lambdaRuntime</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime</code> | The Lambda runtime to use for drift detection. |
 | <code><a href="#cdk-drift-monitor.DriftMonitorProps.property.metricNamespace">metricNamespace</a></code> | <code>string</code> | Namespace of published metric. |
 | <code><a href="#cdk-drift-monitor.DriftMonitorProps.property.runEvery">runEvery</a></code> | <code>aws-cdk-lib.Duration</code> | Run drift detection every X duration. |
 | <code><a href="#cdk-drift-monitor.DriftMonitorProps.property.stackNames">stackNames</a></code> | <code>string[]</code> | List of stack names to monitor for CloudFormation drifts. |
@@ -160,6 +161,19 @@ public readonly alarmOptions: CreateAlarmOptions;
 - *Default:* alarm on 1 drifted stacks or more, for 3 data points, for
 
 Options to create alarm.
+
+---
+
+##### `lambdaRuntime`<sup>Optional</sup> <a name="lambdaRuntime" id="cdk-drift-monitor.DriftMonitorProps.property.lambdaRuntime"></a>
+
+```typescript
+public readonly lambdaRuntime: Runtime;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.Runtime
+- *Default:* Latest Node.js runtime available in your deployment region (determined via determineLatestNodeRuntime)
+
+The Lambda runtime to use for drift detection.
 
 ---
 
