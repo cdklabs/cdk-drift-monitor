@@ -3,6 +3,7 @@ import { Alarm, ComparisonOperator, CreateAlarmOptions, Metric, Statistic, Treat
 import * as events from 'aws-cdk-lib/aws-events';
 import * as eventsTargets from 'aws-cdk-lib/aws-events-targets';
 import { Effect, ManagedPolicy, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import { DetectDriftFunction } from './detect-drift-function';
 
@@ -42,6 +43,13 @@ export interface DriftMonitorProps {
    */
   readonly alarmOptions?: CreateAlarmOptions;
 
+  /**
+   * The Lambda runtime to use for drift detection.
+   *
+   * @default - Latest Node.js runtime available in the deployment region (determined via determineLatestNodeRuntime)
+   */
+  readonly runtime?: lambda.Runtime;
+
 }
 
 export class DriftMonitor extends Construct {
@@ -62,6 +70,7 @@ export class DriftMonitor extends Construct {
     const stacks = props.stacks?.map(stack => stack.stackName) ?? props.stackNames;
     const metricNamespace = props.metricNamespace ?? 'DriftMonitor';
     const detectDriftLambda = new DetectDriftFunction(this, 'DetectDriftLambda', {
+      runtime: props.runtime,
       environment: {
         metricNamespace: metricNamespace,
         ... stacks ? { stackNames: stacks.join(',') } : {},

@@ -41,6 +41,20 @@ const topic = new sns.Topic(this, 'errorTopic');
 driftMonitor.alarm.addAlarmAction(new SnsAction(topic));
 ```
 
+## Lambda Runtime
+
+By default, the drift detection Lambda function uses the latest Node.js runtime available in your deployment region. This is determined automatically at CDK synthesis time.
+
+You can override the runtime to use a specific Node.js version:
+
+```ts
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+
+new DriftMonitor(driftDetectStack, 'DriftMonitor', {
+  runtime: lambda.Runtime.NODEJS_20_X,
+});
+```
+
 ## Roadmap
 
 - [ ] Publish to Maven
