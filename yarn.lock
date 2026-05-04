@@ -29,9 +29,9 @@
     semver "^7.7.4"
 
 "@aws-cdk/cloud-assembly-schema@^53.18.0":
-  version "53.18.0"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-schema/-/cloud-assembly-schema-53.18.0.tgz#193533d3821291053891879ba15a6d8bbdf646de"
-  integrity sha512-/fa6rOpokkfa5tVIdhsaexQq5MVVTSsZSD1Tu45YcrdyGRusGrM9RlPMCPrwvMS1UfdVFBhcgO9dl9ODWAWOeQ==
+  version "53.20.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-schema/-/cloud-assembly-schema-53.20.0.tgz#3010aa1ab429a1ba2d42e2cf449496e115a8d629"
+  integrity sha512-4kLAUO+I8b4nlk1Z2P4n3Ye8UtqCiXk0kJMLUThBnyHLbdz06rwAb+qlb9WZOie7NtPluemVS243ifcBh/NVsQ==
   dependencies:
     jsonschema "~1.4.1"
     semver "^7.7.4"
@@ -1424,10 +1424,10 @@ available-typed-arrays@^1.0.7:
   dependencies:
     possible-typed-array-names "^1.0.0"
 
-aws-cdk-lib@2.251.0:
-  version "2.251.0"
-  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.251.0.tgz#d959e41d0b95d6efc74be0780569881e2a462c14"
-  integrity sha512-H1Jfz2Oyejn+yG24i+By9fZpYfg+E3h1XnFCF2wnt/MyGOTIePRph7MRGkX73ap10ERSpmd0Ly58OLVykFoSQA==
+aws-cdk-lib@2.252.0:
+  version "2.252.0"
+  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.252.0.tgz#4bfee375e85a8a999d7a1f324c38ab01508a508d"
+  integrity sha512-bRLyTtJxhVgsx2JrL2B/KYYWf+Rg0s68UgQp+VRZK0h5fXeaPqDVEJGPMr7FiOgrmYwEadjfbxsTsZKNAloAvg==
   dependencies:
     "@aws-cdk/asset-awscli-v1" "2.2.273"
     "@aws-cdk/asset-node-proxy-agent-v6" "^2.1.1"
@@ -2690,9 +2690,9 @@ fast-levenshtein@^2.0.6:
   integrity sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==
 
 fast-uri@^3.0.1:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/fast-uri/-/fast-uri-3.1.0.tgz#66eecff6c764c0df9b762e62ca7edcfb53b4edfa"
-  integrity sha512-iPeeDKJSWf4IEOasVVrknXpaBV0IApz/gp7S2bb7Z4Lljbl2MGJRqInZiUrQwV16cpzw/D3S5j5Julj/gT52AA==
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/fast-uri/-/fast-uri-3.1.1.tgz#dd085fec2494a2a33bac6e61277374669e1dd774"
+  integrity sha512-h2r7rcm6Ee/J8o0LD5djLuFVcfbZxhvho4vvsbeV0aMvXjUgqv4YpxpkEx0d68l6+IleVfLAdVEfhR7QNMkGHQ==
 
 fast-xml-builder@^1.1.5:
   version "1.1.5"
