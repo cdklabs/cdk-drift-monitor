@@ -11,9 +11,9 @@ describe('runtime configuration', () => {
       stackNames: ['stack1'],
     });
 
-    // Should use determineLatestNodeRuntime() which returns nodejs22.x in test environment
+    // Should use determineLatestNodeRuntime() which returns nodejs24.x in test environment
     Template.fromStack(stack).hasResourceProperties('AWS::Lambda::Function', {
-      Runtime: 'nodejs22.x',
+      Runtime: 'nodejs24.x',
     });
   });
 
