@@ -21,18 +21,18 @@
     "@cdklabs/tskb" "^0.0.4"
 
 "@aws-cdk/cloud-assembly-api@^2.2.6":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-api/-/cloud-assembly-api-2.3.0.tgz#fe1027594ea171cfed154ef8438b3b29fe4e1e93"
-  integrity sha512-Z+TYWH9YJGDQSwjORTWvfRFHGK5Gzdp73ElVO8mmZrgndlZgNV2LJOcX1HYRlU/OuR7I+Qo5GLpfc/PM1s7JlQ==
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-api/-/cloud-assembly-api-2.4.0.tgz#e29583f6cbc851e1dfda4adbc2a3d1eb9f02d39e"
+  integrity sha512-ooStESI1uXNcFAx1IgG6XcN7SsMuenoaxSb1FHqcLqwy7Lq5HUMWM52mtIzrS/uJmoFNvoxQ7fGbk8MfCGIjlw==
   dependencies:
     json-source-map "^0.6.1"
     jsonschema "^1.5.0"
     semver "^7.8.5"
 
 "@aws-cdk/cloud-assembly-schema@^54.11.0":
-  version "54.20.0"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-schema/-/cloud-assembly-schema-54.20.0.tgz#17d4b638ed0a016e7995739a71fe52d2ead36cd3"
-  integrity sha512-ts2dVBi0VUXOLKcqyLYsHUWYpwGPFd+xm4q+6Y4jjP8orwodjRi2mJrmpy9b0gHnbv8e/hFnmEbqrD0bBJOnPA==
+  version "54.21.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-schema/-/cloud-assembly-schema-54.21.0.tgz#7d3ff53ed7cb48c137490789c00c3ca31450cf55"
+  integrity sha512-URh+k3/xG+e48lF41qBn/J8TzxwBaHt7Wsg5ZF+W4l76yiPhFmW7atV0BMVrWy7jh4SGO+yCuuqJe+CNjSk31w==
   dependencies:
     jsonschema "^1.5.0"
     semver "^7.8.5"
@@ -1419,10 +1419,10 @@ available-typed-arrays@^1.0.7:
   dependencies:
     possible-typed-array-names "^1.0.0"
 
-aws-cdk-lib@2.266.0:
-  version "2.266.0"
-  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.266.0.tgz#bb7868b95755c86f78400c0ce9f03c0185d275a7"
-  integrity sha512-sBQU42pEc9ud3yeVU2En2euQRUhCg63eaJIPEVpBtE5aPhJjN3d9MkzQ9eYGLVXP3fnohUE54BiVOdUrkEDUbg==
+aws-cdk-lib@2.267.0:
+  version "2.267.0"
+  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.267.0.tgz#72017443bf024d8a5d482cf1a4bf0de48393ddda"
+  integrity sha512-ubmc2Th+XFjQAy6cnihRmH9Xxf9X2iZ5Vuf0g/4kBiBSoLahJy5cwJB5TmicEpitZ+fHBRyfoAZ4BkLk4G0Stg==
   dependencies:
     "@aws-cdk/asset-awscli-v1" "2.2.292"
     "@aws-cdk/asset-node-proxy-agent-v6" "^2.1.2"
