@@ -30,9 +30,9 @@
     semver "^7.8.5"
 
 "@aws-cdk/cloud-assembly-schema@^55.0.0":
-  version "55.3.0"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-schema/-/cloud-assembly-schema-55.3.0.tgz#8060af8df3fbfadcbb3da1663833cd9d2b2137f4"
-  integrity sha512-V40A9DFnKSB8kS615QaaMxLEyWRhHhPWz6fTlssT5fr61BAPgY+dduRtgN3wEo1IyV/zURuhVEfDIKyE8JzSNw==
+  version "55.4.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-schema/-/cloud-assembly-schema-55.4.0.tgz#d75c4c3199cb5f9803e1bb928efe6082fca5f388"
+  integrity sha512-u+vZLR1ZkmUZdbNRjrHPxpcNLhBHdJwG0bFx5IvEhN1J7AOhx+olWm/7K4e953YnPHr0y3CF2UxQlARqR9/FQg==
   dependencies:
     jsonschema "^1.5.0"
     semver "^7.8.5"
