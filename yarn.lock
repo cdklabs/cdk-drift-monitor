@@ -29,13 +29,13 @@
     jsonschema "^1.5.0"
     semver "^7.8.5"
 
-"@aws-cdk/cloud-assembly-schema@^55.0.0":
-  version "55.4.0"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-schema/-/cloud-assembly-schema-55.4.0.tgz#d75c4c3199cb5f9803e1bb928efe6082fca5f388"
-  integrity sha512-u+vZLR1ZkmUZdbNRjrHPxpcNLhBHdJwG0bFx5IvEhN1J7AOhx+olWm/7K4e953YnPHr0y3CF2UxQlARqR9/FQg==
+"@aws-cdk/cloud-assembly-schema@^55.6.0":
+  version "55.6.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-schema/-/cloud-assembly-schema-55.6.0.tgz#6b9ee950b66b2ed561ba7e4550ffac0471064d9a"
+  integrity sha512-gvgzQtc0ZEcYc8WXMyCfbwJ1xlGWM/X6rG5gEiCSqT8c7e31c4tVQ5nhdgztKJ+E0UL4BCsVN0s/3YP62NJ/yg==
   dependencies:
     jsonschema "^1.5.0"
-    semver "^7.8.5"
+    semver "^7.8.6"
 
 "@aws-cdk/integ-runner@latest":
   version "2.206.1"
@@ -56,10 +56,10 @@
   dependencies:
     "@cdklabs/tskb" "^0.0.4"
 
-"@aws/cloudformation-validate@1.12.1":
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/@aws/cloudformation-validate/-/cloudformation-validate-1.12.1.tgz#3d19861ef68aaa1c8b9d8cf3cc24efd27c20ce13"
-  integrity sha512-syZyTZQ1JPubKfzkfxQ8AoLEhma+2Upsz/ESLiosVnncdo4cdWDhsLp5Bxol3Wi94j8gJkch8H4rsYZWk4K0OQ==
+"@aws/cloudformation-validate@1.14.0":
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/@aws/cloudformation-validate/-/cloudformation-validate-1.14.0.tgz#618e5b0709f702cb07eb670a665137fd63a61678"
+  integrity sha512-KIgS+l0XB890RT7zWcrnULexkxkA7vaIf2DllOGOU47iNQNgitlMndqBHGERgx9VXxxb3EpVXCD8PlpHbJZ+uQ==
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.29.7":
   version "7.29.7"
@@ -1406,16 +1406,16 @@ available-typed-arrays@^1.0.7:
   dependencies:
     possible-typed-array-names "^1.0.0"
 
-aws-cdk-lib@2.275.0:
-  version "2.275.0"
-  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.275.0.tgz#8cc7071b6bc3a1351306df7a8a3579aac9387c12"
-  integrity sha512-Gjj1tM3dQedhsI7MdwMvULF1PzgEO/zX0KFHU9xwZskkSL9057IZB4fJWm9nL+aaNU3TU+lNt8uB6d8QcZtUpQ==
+aws-cdk-lib@2.277.0:
+  version "2.277.0"
+  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.277.0.tgz#0b91841f0b1411023499512de7a4d984afe88eba"
+  integrity sha512-xUY16j7p5rsyohZIqxUtk7CswPpagCnDFoYKwwK2w78Of+m2+/EhU5UzI3FbNWeKttKMfwvddhVuah4GGODkAQ==
   dependencies:
     "@aws-cdk/asset-awscli-v1" "2.2.292"
     "@aws-cdk/asset-node-proxy-agent-v6" "^2.1.3"
     "@aws-cdk/cloud-assembly-api" "^2.5.0"
-    "@aws-cdk/cloud-assembly-schema" "^55.0.0"
-    "@aws/cloudformation-validate" "1.12.1"
+    "@aws-cdk/cloud-assembly-schema" "^55.6.0"
+    "@aws/cloudformation-validate" "1.14.0"
     "@balena/dockerignore" "^1.0.2"
     case "1.6.3"
     fs-extra "^11.4.1"
@@ -1424,7 +1424,7 @@ aws-cdk-lib@2.275.0:
     mime-types "^2.1.35"
     minimatch "^10.2.6"
     punycode "^2.3.1"
-    semver "^7.8.5"
+    semver "^7.8.6"
     yaml "1.10.3"
 
 aws-sdk@^2.1693.0:
@@ -1536,9 +1536,9 @@ brace-expansion@^1.1.7:
     concat-map "0.0.1"
 
 brace-expansion@^5.0.8:
-  version "5.0.12"
-  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-5.0.12.tgz#995fbb4750a77c4d16a7dc942ff2ca6ef8e675ec"
-  integrity sha512-YovQ3rzhaLMIrDjNDMkNS01tea93qhEhG5xy8f6+R0l+dw3Ki+5sCoIoI942iuLZTHWogWktgwVDhU09iNEimQ==
+  version "5.0.13"
+  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-5.0.13.tgz#e2d4497370f7e385e6f96b57bd7ff11d77d85851"
+  integrity sha512-Vh3dmFbc4wZeox7M9I/0L9GfFd83Su4+yCck/OF9Gi/P/dAHn0RT7X4K9R7gMNMhDck3DvhR6QXsnQdjjgwNvQ==
   dependencies:
     balanced-match "^4.0.2"
 
@@ -3013,10 +3013,15 @@ gopd@^1.0.1, gopd@^1.2.0:
   resolved "https://registry.yarnpkg.com/gopd/-/gopd-1.2.0.tgz#89f56b8217bdbc8802bd299df6d7f1081d7e51a1"
   integrity sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==
 
-graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.4, graceful-fs@^4.2.9:
+graceful-fs@^4.1.2, graceful-fs@^4.2.4, graceful-fs@^4.2.9:
   version "4.2.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.11.tgz#4183e4e8bf08bb6e05bbb2f7d2e0c8f712ca40e3"
   integrity sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==
+
+graceful-fs@^4.1.6, graceful-fs@^4.2.0:
+  version "4.2.12"
+  resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.12.tgz#7f6162dee07bc600281cea1b038e5f7cf215a6c2"
+  integrity sha512-iuyGF2E4oafQfPsRrG2wtY2ILupMhvtdrhzrxB+0VcjsPpSPttpfYdjnGFGsTi5MaJFjI1jOKHPQ6UTbTj9TAw==
 
 handlebars@^4.7.7:
   version "4.7.10"
