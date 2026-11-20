@@ -4,6 +4,8 @@
 
 ### DriftMonitor <a name="DriftMonitor" id="cdk-drift-monitor.DriftMonitor"></a>
 
+- *Implements:* constructs.IConstruct, constructs.IDependable
+
 #### Initializers <a name="Initializers" id="cdk-drift-monitor.DriftMonitor.Initializer"></a>
 
 ```typescript
