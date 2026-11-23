@@ -14,6 +14,7 @@ export async function handler() {
 
   const requestedStackNames = process.env.stackNames?.split(',');
   const metricNamespace = process.env.metricNamespace;
+  const timeoutMs = getTimeoutMs(process.env.driftDetectionTimeoutSeconds);
   console.log(`requestedStackNames: ${requestedStackNames}`);
   const stacks = await getStacks(requestedStackNames);
 
@@ -28,7 +29,7 @@ export async function handler() {
   let driftStatusList: (StackDriftStatus | undefined)[] = [];
   for (const stack of eligibleStacks) {
     const driftDetectionId = await detectDriftAndGetDetectionId(stack);
-    const driftStatus = await getDriftStatus(stack, driftDetectionId);
+    const driftStatus = await getDriftStatus(stack, driftDetectionId, timeoutMs);
     driftStatusList = [...driftStatusList, driftStatus];
   }
   const numOfDriftedStacks = driftStatusList.filter(status => status === 'DRIFTED').length;
@@ -80,31 +81,38 @@ function shouldWaitForDriftDetectionToFinish(driftDetectionStatus: StackDriftDet
   return driftDetectionStatus === 'DETECTION_IN_PROGRESS';
 }
 
-async function getDriftStatus(stack: Stack, detectionId: string): Promise<StackDriftStatus | undefined> {
+const DEFAULT_TIMEOUT_SECONDS = 60;
+const POLL_INTERVAL_MS = 1_000;
+
+function getTimeoutMs(driftDetectionTimeoutSeconds: string | undefined): number {
+  if (driftDetectionTimeoutSeconds === undefined) {
+    return DEFAULT_TIMEOUT_SECONDS * 1_000;
+  }
+  const seconds = Number(driftDetectionTimeoutSeconds);
+  if (!Number.isInteger(seconds) || seconds < 1) {
+    throw new Error(`Invalid driftDetectionTimeoutSeconds: ${driftDetectionTimeoutSeconds}`);
+  }
+  return seconds * 1_000;
+}
+
+async function getDriftStatus(stack: Stack, detectionId: string, timeoutMs: number): Promise<StackDriftStatus | undefined> {
   const stackName = stack.StackName;
   console.log(`Waiting for drift detection ${detectionId} to complete for stack ${stackName}`);
-  const maxTries = 60;
-  let tries = 0;
-  let driftDetectionStatus: StackDriftDetectionStatus;
-  let stackDriftStatus: StackDriftStatus | undefined;
-  do {
-    await sleep(1000);
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    await sleep(POLL_INTERVAL_MS);
     const response = await cloudformation.describeStackDriftDetectionStatus({
       StackDriftDetectionId: detectionId,
     }).promise();
-    driftDetectionStatus = response.DetectionStatus;
-    if (driftDetectionStatus === 'DETECTION_FAILED') {
+    if (response.DetectionStatus === 'DETECTION_FAILED') {
       throw new Error(`Detection failed: ${response.DetectionStatusReason}`);
     }
-    stackDriftStatus = response.StackDriftStatus;
-    tries++;
-  } while (shouldWaitForDriftDetectionToFinish(driftDetectionStatus) && tries < maxTries);
-  if (tries === maxTries) {
-    throw new Error(`Reached max tries for stack ${stackName}`);
+    if (!shouldWaitForDriftDetectionToFinish(response.DetectionStatus)) {
+      console.log(`stackName: ${stackName}, driftDetectionStatus: ${response.DetectionStatus}, stackDriftStatus: ${response.StackDriftStatus}`);
+      return response.StackDriftStatus;
+    }
   }
-
-  console.log(`stackName: ${stackName}, driftDetectionStatus: ${driftDetectionStatus}, stackDriftStatus: ${stackDriftStatus}`);
-  return stackDriftStatus;
+  throw new Error(`Drift detection did not finish within ${timeoutMs / 1_000} seconds for stack ${stackName}`);
 }
 
 async function sleep(ms: number) {
