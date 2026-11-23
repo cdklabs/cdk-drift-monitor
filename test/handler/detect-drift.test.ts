@@ -145,6 +145,60 @@ describe('detect-drift lambda handler tests', () => {
     expect(detectDriftMockManager.getDriftMetricValue()).toBe(1);
   });
 
+  test('when detection completes on the last allowed poll then emit drifts', async () => {
+    // GIVEN
+    process.env.stackNames = 'stack';
+    process.env.metricNamespace = 'someNamespace';
+    process.env.driftDetectionTimeoutSeconds = '2';
+
+    // WHEN
+    const detectDriftMockManager = new DetectDriftMockManager();
+    detectDriftMockManager.mockDescribeStacksResponse([{
+      StackName: 'stack',
+      StackStatus: 'CREATE_COMPLETE',
+    }]);
+    detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('UNKNOWN', 'DETECTION_IN_PROGRESS');
+    detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('DRIFTED', 'DETECTION_COMPLETE');
+
+    // THEN
+    const handler = await importHandler();
+    await handler();
+    expect(detectDriftMockManager.getDriftMetricValue()).toBe(1);
+  });
+
+  test('when detection is still in progress after driftDetectionTimeoutSeconds then throw', async () => {
+    // GIVEN
+    process.env.stackNames = 'stack';
+    process.env.metricNamespace = 'someNamespace';
+    process.env.driftDetectionTimeoutSeconds = '2';
+
+    // WHEN
+    const detectDriftMockManager = new DetectDriftMockManager();
+    detectDriftMockManager.mockDescribeStacksResponse([{
+      StackName: 'stack',
+      StackStatus: 'CREATE_COMPLETE',
+    }]);
+    detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('UNKNOWN', 'DETECTION_IN_PROGRESS');
+    detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('UNKNOWN', 'DETECTION_IN_PROGRESS');
+
+    // THEN
+    const handler = await importHandler();
+    await expect(handler()).rejects.toThrow(/Reached max tries for stack stack/);
+  });
+
+  each(['0', '-1', '1.5', 'abc']).test('when driftDetectionTimeoutSeconds is %s then throw', async (value: string) => {
+    // GIVEN
+    process.env.stackNames = 'stack';
+    process.env.metricNamespace = 'someNamespace';
+    process.env.driftDetectionTimeoutSeconds = value;
+
+    // WHEN
+    const handler = await importHandler();
+
+    // THEN
+    await expect(handler()).rejects.toThrow(/Invalid driftDetectionTimeoutSeconds/);
+  });
+
   test('when detection status is failed then throw', async () => {
     // GIVEN
     process.env.stackNames = 'stack';

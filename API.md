@@ -165,6 +165,7 @@ const driftMonitorProps: DriftMonitorProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-drift-monitor.DriftMonitorProps.property.alarmOptions">alarmOptions</a></code> | <code>aws-cdk-lib.aws_cloudwatch.CreateAlarmOptions</code> | Options to create alarm. |
+| <code><a href="#cdk-drift-monitor.DriftMonitorProps.property.driftDetectionTimeout">driftDetectionTimeout</a></code> | <code>aws-cdk-lib.Duration</code> | How long to wait for drift detection to finish on each stack. |
 | <code><a href="#cdk-drift-monitor.DriftMonitorProps.property.metricNamespace">metricNamespace</a></code> | <code>string</code> | Namespace of published metric. |
 | <code><a href="#cdk-drift-monitor.DriftMonitorProps.property.runEvery">runEvery</a></code> | <code>aws-cdk-lib.Duration</code> | Run drift detection every X duration. |
 | <code><a href="#cdk-drift-monitor.DriftMonitorProps.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime</code> | The Lambda runtime to use for drift detection. |
@@ -183,6 +184,23 @@ public readonly alarmOptions: CreateAlarmOptions;
 - *Default:* alarm on 1 drifted stacks or more, for 3 data points, for
 
 Options to create alarm.
+
+---
+
+##### `driftDetectionTimeout`<sup>Optional</sup> <a name="driftDetectionTimeout" id="cdk-drift-monitor.DriftMonitorProps.property.driftDetectionTimeout"></a>
+
+```typescript
+public readonly driftDetectionTimeout: Duration;
+```
+
+- *Type:* aws-cdk-lib.Duration
+- *Default:* Duration.minutes(1)
+
+How long to wait for drift detection to finish on each stack.
+
+Drift detection on stacks with many resources can take longer than the default.
+Stacks are checked one after another, so the total for all stacks must fit in the
+5 minute Lambda timeout.
 
 ---
 

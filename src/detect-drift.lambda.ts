@@ -14,6 +14,7 @@ export async function handler() {
 
   const requestedStackNames = process.env.stackNames?.split(',');
   const metricNamespace = process.env.metricNamespace;
+  const maxTries = getMaxTries(process.env.driftDetectionTimeoutSeconds);
   console.log(`requestedStackNames: ${requestedStackNames}`);
   const stacks = await getStacks(requestedStackNames);
 
@@ -28,7 +29,7 @@ export async function handler() {
   let driftStatusList: (StackDriftStatus | undefined)[] = [];
   for (const stack of eligibleStacks) {
     const driftDetectionId = await detectDriftAndGetDetectionId(stack);
-    const driftStatus = await getDriftStatus(stack, driftDetectionId);
+    const driftStatus = await getDriftStatus(stack, driftDetectionId, maxTries);
     driftStatusList = [...driftStatusList, driftStatus];
   }
   const numOfDriftedStacks = driftStatusList.filter(status => status === 'DRIFTED').length;
@@ -80,10 +81,22 @@ function shouldWaitForDriftDetectionToFinish(driftDetectionStatus: StackDriftDet
   return driftDetectionStatus === 'DETECTION_IN_PROGRESS';
 }
 
-async function getDriftStatus(stack: Stack, detectionId: string): Promise<StackDriftStatus | undefined> {
+const DEFAULT_MAX_TRIES = 60;
+
+function getMaxTries(driftDetectionTimeoutSeconds: string | undefined): number {
+  if (driftDetectionTimeoutSeconds === undefined) {
+    return DEFAULT_MAX_TRIES;
+  }
+  const maxTries = Number(driftDetectionTimeoutSeconds);
+  if (!Number.isInteger(maxTries) || maxTries < 1) {
+    throw new Error(`Invalid driftDetectionTimeoutSeconds: ${driftDetectionTimeoutSeconds}`);
+  }
+  return maxTries;
+}
+
+async function getDriftStatus(stack: Stack, detectionId: string, maxTries: number): Promise<StackDriftStatus | undefined> {
   const stackName = stack.StackName;
   console.log(`Waiting for drift detection ${detectionId} to complete for stack ${stackName}`);
-  const maxTries = 60;
   let tries = 0;
   let driftDetectionStatus: StackDriftDetectionStatus;
   let stackDriftStatus: StackDriftStatus | undefined;
@@ -99,7 +112,7 @@ async function getDriftStatus(stack: Stack, detectionId: string): Promise<StackD
     stackDriftStatus = response.StackDriftStatus;
     tries++;
   } while (shouldWaitForDriftDetectionToFinish(driftDetectionStatus) && tries < maxTries);
-  if (tries === maxTries) {
+  if (shouldWaitForDriftDetectionToFinish(driftDetectionStatus)) {
     throw new Error(`Reached max tries for stack ${stackName}`);
   }
 

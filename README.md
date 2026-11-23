@@ -55,6 +55,20 @@ new DriftMonitor(driftDetectStack, 'DriftMonitor', {
 });
 ```
 
+## Drift Detection Timeout
+
+By default, the Lambda function waits up to 1 minute for drift detection to finish on each stack.
+Drift detection on stacks with many resources can take longer, and the function then fails with
+`Reached max tries for stack <name>` and emits no metric. Raise the timeout for large stacks:
+
+```ts
+new DriftMonitor(driftDetectStack, 'DriftMonitor', {
+  driftDetectionTimeout: Duration.minutes(4),
+});
+```
+
+Stacks are checked one after another, so the total for all stacks must fit in the 5 minute Lambda timeout.
+
 ## Roadmap
 
 - [ ] Publish to Maven
