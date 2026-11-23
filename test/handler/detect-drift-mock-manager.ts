@@ -76,6 +76,10 @@ export class DetectDriftMockManager {
     });
   }
 
+  public getDescribeStackDriftDetectionStatusCallCount(): number {
+    return this.describeStackDriftDetectionStatusMock.mock.calls.length;
+  }
+
   public getDriftMetricValue(): number {
     return this.putMetricDataMock.mock.calls[0][0].MetricData[0].Value;
   }
