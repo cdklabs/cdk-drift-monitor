@@ -77,14 +77,17 @@ test('lambda is created with stackNames and custom metric namespace environment 
   });
 });
 
-test('when driftDetectionTimeout is given then lambda is created with driftDetectionTimeoutSeconds', () => {
+test.each([
+  [Duration.seconds(1), '1'],
+  [Duration.minutes(4), '240'],
+])('when driftDetectionTimeout is %s then lambda is created with driftDetectionTimeoutSeconds %s', (driftDetectionTimeout, expectedSeconds) => {
   // GIVEN
   const stack = new Stack();
 
   // WHEN
   new DriftMonitor(stack, 'DriftMonitor', {
     stackNames: ['stack1'],
-    driftDetectionTimeout: Duration.minutes(4),
+    driftDetectionTimeout,
   });
 
   // THEN
@@ -93,7 +96,7 @@ test('when driftDetectionTimeout is given then lambda is created with driftDetec
       Variables: {
         stackNames: 'stack1',
         metricNamespace: 'DriftMonitor',
-        driftDetectionTimeoutSeconds: '240',
+        driftDetectionTimeoutSeconds: expectedSeconds,
       },
     },
   });
@@ -224,7 +227,7 @@ describe('props input validation tests', () => {
 
   test.each([
     ['0 seconds', Duration.seconds(0)],
-    ['more than 5 minutes', Duration.minutes(6)],
+    ['more than 4 minutes', Duration.seconds(241)],
     ['a fraction of a second', Duration.millis(1500)],
   ])('when driftDetectionTimeout is %s then construct throws', (_name, driftDetectionTimeout) => {
     // GIVEN
@@ -234,7 +237,7 @@ describe('props input validation tests', () => {
     expect(() => new DriftMonitor(stack, 'DriftMonitor', {
       stackNames: ['stack1'],
       driftDetectionTimeout,
-    })).toThrow(/driftDetectionTimeout must be a whole number of seconds between 1 second and 5 minutes/);
+    })).toThrow(/driftDetectionTimeout must be a whole number of seconds between 1 second and 4 minutes/);
   });
 
   test('when runEvery is not in supported durations then construct throws', () => {

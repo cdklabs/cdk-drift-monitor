@@ -62,9 +62,15 @@ export class DetectDriftMockManager {
     });
   }
 
+  /**
+   * @param callDurationMs moves the fake clock forward to simulate a slow call
+   */
   public mockDescribeStackDriftDetectionStatusResponse(stackDriftStatus: StackDriftStatus,
-    stackDriftDetectionStatus?: StackDriftDetectionStatus) {
+    stackDriftDetectionStatus?: StackDriftDetectionStatus, callDurationMs = 0) {
     this.describeStackDriftDetectionStatusMock.mockImplementationOnce(() => {
+      if (callDurationMs > 0) {
+        jest.setSystemTime(Date.now() + callDurationMs);
+      }
       return {
         promise: () => new Promise(resolve => {
           resolve({

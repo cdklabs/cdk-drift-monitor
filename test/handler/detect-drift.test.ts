@@ -145,67 +145,84 @@ describe('detect-drift lambda handler tests', () => {
     expect(detectDriftMockManager.getDriftMetricValue()).toBe(1);
   });
 
-  test('when detection completes on the last allowed poll then emit drifts', async () => {
-    // GIVEN
-    process.env.stackNames = 'stack';
-    process.env.metricNamespace = 'someNamespace';
-    process.env.driftDetectionTimeoutSeconds = '2';
+  describe('drift detection timeout', () => {
 
-    // WHEN
-    const detectDriftMockManager = new DetectDriftMockManager();
-    detectDriftMockManager.mockDescribeStacksResponse([{
-      StackName: 'stack',
-      StackStatus: 'CREATE_COMPLETE',
-    }]);
-    detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('UNKNOWN', 'DETECTION_IN_PROGRESS');
-    detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('DRIFTED', 'DETECTION_COMPLETE');
+    beforeEach(() => {
+      jest.useFakeTimers('modern');
+      process.env.stackNames = 'stack';
+      process.env.metricNamespace = 'someNamespace';
+    });
 
-    // THEN
-    const handler = await importHandler();
-    await handler();
-    expect(detectDriftMockManager.getDriftMetricValue()).toBe(1);
-  });
+    afterEach(() => {
+      jest.useRealTimers();
+    });
 
-  test('when detection is still in progress after driftDetectionTimeoutSeconds then throw', async () => {
-    // GIVEN
-    process.env.stackNames = 'stack';
-    process.env.metricNamespace = 'someNamespace';
-    process.env.driftDetectionTimeoutSeconds = '2';
+    function givenStackWithDetectionInProgress(polls: number, callDurationMs = 0) {
+      const detectDriftMockManager = new DetectDriftMockManager();
+      detectDriftMockManager.mockDescribeStacksResponse([{
+        StackName: 'stack',
+        StackStatus: 'CREATE_COMPLETE',
+      }]);
+      for (let i = 0; i < polls; i++) {
+        detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse(
+          'UNKNOWN', 'DETECTION_IN_PROGRESS', callDurationMs);
+      }
+      return detectDriftMockManager;
+    }
 
-    // WHEN
-    const detectDriftMockManager = new DetectDriftMockManager();
-    detectDriftMockManager.mockDescribeStacksResponse([{
-      StackName: 'stack',
-      StackStatus: 'CREATE_COMPLETE',
-    }]);
-    detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('UNKNOWN', 'DETECTION_IN_PROGRESS');
-    detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('UNKNOWN', 'DETECTION_IN_PROGRESS');
+    test('when no driftDetectionTimeoutSeconds then poll every second for 60 seconds', async () => {
+      // GIVEN
+      const detectDriftMockManager = givenStackWithDetectionInProgress(61);
 
-    // THEN
-    const handler = await importHandler();
-    await expect(handler()).rejects.toThrow(/Drift detection did not finish within 2 seconds for stack stack/);
-  });
+      // WHEN
+      const handler = await importHandler();
 
-  test('when detection stays in progress then wait longer between polls', async () => {
-    // GIVEN
-    process.env.stackNames = 'stack';
-    process.env.metricNamespace = 'someNamespace';
-    process.env.driftDetectionTimeoutSeconds = '3';
+      // THEN
+      await expect(runWithFakeTimers(handler())).rejects.toThrow(
+        /Drift detection did not finish within 60 seconds for stack stack/);
+      expect(detectDriftMockManager.getDescribeStackDriftDetectionStatusCallCount()).toBe(60);
+    });
 
-    // WHEN
-    const detectDriftMockManager = new DetectDriftMockManager();
-    detectDriftMockManager.mockDescribeStacksResponse([{
-      StackName: 'stack',
-      StackStatus: 'CREATE_COMPLETE',
-    }]);
-    detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('UNKNOWN', 'DETECTION_IN_PROGRESS');
-    detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('UNKNOWN', 'DETECTION_IN_PROGRESS');
-    detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('UNKNOWN', 'DETECTION_IN_PROGRESS');
+    test('when detection is still in progress after driftDetectionTimeoutSeconds then throw', async () => {
+      // GIVEN
+      process.env.driftDetectionTimeoutSeconds = '3';
+      const detectDriftMockManager = givenStackWithDetectionInProgress(4);
 
-    // THEN polls after 1s and 3s (1s + 2s), not every second
-    const handler = await importHandler();
-    await expect(handler()).rejects.toThrow(/did not finish within 3 seconds/);
-    expect(detectDriftMockManager.getDescribeStackDriftDetectionStatusCallCount()).toBe(2);
+      // WHEN
+      const handler = await importHandler();
+
+      // THEN
+      await expect(runWithFakeTimers(handler())).rejects.toThrow(
+        /Drift detection did not finish within 3 seconds for stack stack/);
+      expect(detectDriftMockManager.getDescribeStackDriftDetectionStatusCallCount()).toBe(3);
+    });
+
+    test('when detection completes on the last allowed poll then emit drifts', async () => {
+      // GIVEN
+      process.env.driftDetectionTimeoutSeconds = '2';
+      const detectDriftMockManager = givenStackWithDetectionInProgress(1);
+      detectDriftMockManager.mockDescribeStackDriftDetectionStatusResponse('DRIFTED', 'DETECTION_COMPLETE');
+
+      // WHEN
+      const handler = await importHandler();
+      await runWithFakeTimers(handler());
+
+      // THEN
+      expect(detectDriftMockManager.getDriftMetricValue()).toBe(1);
+    });
+
+    test('when status calls are slow then stop polling at the deadline', async () => {
+      // GIVEN
+      process.env.driftDetectionTimeoutSeconds = '3';
+      const detectDriftMockManager = givenStackWithDetectionInProgress(3, 500);
+
+      // WHEN
+      const handler = await importHandler();
+
+      // THEN polls at 1s and 2.5s, then the deadline passes during the second call
+      await expect(runWithFakeTimers(handler())).rejects.toThrow(/did not finish within 3 seconds/);
+      expect(detectDriftMockManager.getDescribeStackDriftDetectionStatusCallCount()).toBe(2);
+    });
   });
 
   each(['0', '-1', '1.5', 'abc']).test('when driftDetectionTimeoutSeconds is %s then throw', async (value: string) => {
@@ -296,6 +313,18 @@ describe('detect-drift lambda handler tests', () => {
     expect(detectDriftMockManager.getDriftMetricValue()).toBe(2);
   });
 });
+
+const flushPromises = () => new Promise(resolve => jest.requireActual('timers').setImmediate(resolve));
+
+async function runWithFakeTimers<T>(promise: Promise<T>): Promise<T> {
+  let settled = false;
+  promise.then(() => { settled = true; }, () => { settled = true; });
+  while (!settled) {
+    await flushPromises();
+    jest.advanceTimersToNextTimer();
+  }
+  return promise;
+}
 
 async function importHandler() {
   const { handler } = await import('../../src/detect-drift.lambda');

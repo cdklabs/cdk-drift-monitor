@@ -82,8 +82,7 @@ function shouldWaitForDriftDetectionToFinish(driftDetectionStatus: StackDriftDet
 }
 
 const DEFAULT_TIMEOUT_SECONDS = 60;
-const INITIAL_POLL_INTERVAL_MS = 1_000;
-const MAX_POLL_INTERVAL_MS = 10_000;
+const POLL_INTERVAL_MS = 1_000;
 
 function getTimeoutMs(driftDetectionTimeoutSeconds: string | undefined): number {
   if (driftDetectionTimeoutSeconds === undefined) {
@@ -99,12 +98,9 @@ function getTimeoutMs(driftDetectionTimeoutSeconds: string | undefined): number 
 async function getDriftStatus(stack: Stack, detectionId: string, timeoutMs: number): Promise<StackDriftStatus | undefined> {
   const stackName = stack.StackName;
   console.log(`Waiting for drift detection ${detectionId} to complete for stack ${stackName}`);
-  let waitedMs = 0;
-  let intervalMs = INITIAL_POLL_INTERVAL_MS;
-  while (waitedMs < timeoutMs) {
-    const delayMs = Math.min(intervalMs, timeoutMs - waitedMs);
-    await sleep(delayMs);
-    waitedMs += delayMs;
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    await sleep(POLL_INTERVAL_MS);
     const response = await cloudformation.describeStackDriftDetectionStatus({
       StackDriftDetectionId: detectionId,
     }).promise();
@@ -115,7 +111,6 @@ async function getDriftStatus(stack: Stack, detectionId: string, timeoutMs: numb
       console.log(`stackName: ${stackName}, driftDetectionStatus: ${response.DetectionStatus}, stackDriftStatus: ${response.StackDriftStatus}`);
       return response.StackDriftStatus;
     }
-    intervalMs = Math.min(intervalMs * 2, MAX_POLL_INTERVAL_MS);
   }
   throw new Error(`Drift detection did not finish within ${timeoutMs / 1_000} seconds for stack ${stackName}`);
 }

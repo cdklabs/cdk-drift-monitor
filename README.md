@@ -58,7 +58,7 @@ new DriftMonitor(driftDetectStack, 'DriftMonitor', {
 ## Drift Detection Timeout
 
 By default, the Lambda function waits up to 1 minute for drift detection to finish on each stack.
-It polls after 1 second, then doubles the wait between polls up to 10 seconds.
+It checks the detection status every second.
 Drift detection on stacks with many resources can take longer, and the function then fails with
 `Drift detection did not finish within <n> seconds for stack <name>` and emits no metric.
 Raise the timeout for large stacks:
@@ -69,7 +69,8 @@ new DriftMonitor(driftDetectStack, 'DriftMonitor', {
 });
 ```
 
-Stacks are checked one after another, so the total for all stacks must fit in the 5 minute Lambda timeout.
+The timeout can be from 1 second to 4 minutes. Stacks are checked one after another, so the total
+for all stacks must fit in the 5 minute Lambda timeout.
 
 ## Roadmap
 

@@ -199,8 +199,9 @@ public readonly driftDetectionTimeout: Duration;
 How long to wait for drift detection to finish on each stack.
 
 Drift detection on stacks with many resources can take longer than the default.
-Stacks are checked one after another, so the total for all stacks must fit in the
-5 minute Lambda timeout.
+Must be a whole number of seconds from 1 second to 4 minutes, which leaves time for
+other API calls in the 5 minute Lambda timeout. Stacks are checked one after another,
+so the total for all stacks must also fit in the Lambda timeout.
 
 ---
 

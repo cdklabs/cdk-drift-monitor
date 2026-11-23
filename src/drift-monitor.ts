@@ -54,8 +54,9 @@ export interface DriftMonitorProps {
    * How long to wait for drift detection to finish on each stack.
    *
    * Drift detection on stacks with many resources can take longer than the default.
-   * Stacks are checked one after another, so the total for all stacks must fit in the
-   * 5 minute Lambda timeout.
+   * Must be a whole number of seconds from 1 second to 4 minutes, which leaves time for
+   * other API calls in the 5 minute Lambda timeout. Stacks are checked one after another,
+   * so the total for all stacks must also fit in the Lambda timeout.
    *
    * @default Duration.minutes(1)
    */
@@ -77,12 +78,12 @@ export class DriftMonitor extends Construct {
     if (props.runEvery !== undefined && !supportedDuration.includes(props.runEvery.toHours({ integral: false }))) {
       throw new Error('runEvery must be either 1, 3, 6, 12 or 24 hours');
     }
-    const lambdaTimeout = Duration.minutes(5);
+    const maxDriftDetectionTimeout = Duration.minutes(4);
     const driftDetectionTimeout = props.driftDetectionTimeout;
     if (driftDetectionTimeout !== undefined) {
       const seconds = driftDetectionTimeout.toSeconds({ integral: false });
-      if (!Number.isInteger(seconds) || seconds < 1 || seconds > lambdaTimeout.toSeconds()) {
-        throw new Error('driftDetectionTimeout must be a whole number of seconds between 1 second and 5 minutes');
+      if (!Number.isInteger(seconds) || seconds < 1 || seconds > maxDriftDetectionTimeout.toSeconds()) {
+        throw new Error('driftDetectionTimeout must be a whole number of seconds between 1 second and 4 minutes');
       }
     }
 
@@ -95,7 +96,7 @@ export class DriftMonitor extends Construct {
         ... stacks ? { stackNames: stacks.join(',') } : {},
         ... driftDetectionTimeout ? { driftDetectionTimeoutSeconds: `${driftDetectionTimeout.toSeconds()}` } : {},
       },
-      timeout: lambdaTimeout,
+      timeout: Duration.minutes(5),
     });
 
     const runEvery = props.runEvery ?? Duration.hours(1);
